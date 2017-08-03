@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/docker-api-graphql.iml" filepath="$PROJECT_DIR$/docker-api-graphql.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/docker-api-graphql_main.iml" filepath="$PROJECT_DIR$/.idea/modules/docker-api-graphql_main.iml" group="docker-api-graphql" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/docker-api-graphql_test.iml" filepath="$PROJECT_DIR$/.idea/modules/docker-api-graphql_test.iml" group="docker-api-graphql" />
+    </modules>
+  </component>
+</project>

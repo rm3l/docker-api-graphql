@@ -1,0 +1,97 @@
+schema {
+  query: Query
+}
+
+type Query {
+  host: HostInfo
+  containers: [Container]
+}
+
+type HostInfo {
+    version: Version!
+    info: Info!
+}
+
+type Version {
+    apiVersion: String!
+    arch: String!
+    buildTime: String!
+    gitCommit: String!
+    goVersion: String!
+    kernelVersion: String!
+    os: String!
+    version: String!
+#    experimental: Boolean!
+}
+
+type Info {
+    architecture: String
+    #TODO
+}
+
+scalar StringStringMap
+
+type Container(all: Boolean, limit: Integer, size: Boolean, filter: StringStringMap) {
+    id: String!
+    names: [String]
+    image: String
+    imageId: String
+    command: String
+    created: Long
+    state: String
+    status: String
+    ports: [Port]
+#    Labels: StringStringMap
+    sizeRw: Long
+    sizeRootFs: Long
+#    HostConfig: HostConfig
+#    NetworkSettings: NetworkSettings
+#    Mounts: List<Mount>
+}
+
+#type ContainerFilter {
+#    ancestor: String
+#    before: String
+#    expose: String
+#    exited: Integer
+#    health: ContainerHealth
+#    id: String
+#    isolation: ContainerIsolation
+#    is_task: Boolean
+#    label: String
+#    name: String
+#    network: String
+#    publish: String
+#    since: String
+#    status: ContainerStatus
+#    volume: String
+#}
+#
+#enum ContainerHealth {
+#    starting
+#    healthy
+#    unhealthy
+#    none
+#}
+#
+#enum ContainerIsolation {
+#    default
+#    process
+#    hyperv
+#}
+#
+#enum ContainerStatus {
+#    created
+#    restarting
+#    running
+#    removing
+#    paused
+#    exited
+#    dead
+#}
+
+type Port {
+    privatePort: Int
+    publicPort: Int
+    type: String
+}
