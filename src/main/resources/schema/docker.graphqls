@@ -8,7 +8,7 @@ schema {
 
 type Query {
   host: HostInfo
-  containers(details: Boolean, all: Boolean, limit: Int, size: Boolean, filter: ContainerFilter): [ContainerDetails]
+  containers(all: Boolean, limit: Int, size: Boolean, filter: ContainerFilter): [Container]
 
 }
 
@@ -115,9 +115,101 @@ type RemoteManager {
     nodeId: String
 }
 
-type ContainerDetails {
-    info: Container
-    details: ContainerFullDetails
+#type ContainerDetails {
+#    info: Container
+#    details: ContainerFullDetails
+#    processes(psArgs: String): TopResults
+#    stats: ContainerStats
+#    logs(follow: Boolean, stdout: Boolean, stderr: Boolean, since: Int, timestamps: Boolean, lines: Int, customParams: StringStringMap): String
+#}
+
+type TopResults {
+    titles: [String]
+#    processes: ImmutableList<ImmutableList<String>>
+}
+
+type ContainerStats {
+    read: Date
+    network: NetworkStats
+#    networks: ImmutableMap<String, NetworkStats>
+    memoryStats: MemoryStats
+#    blockIoStats: BlockIoStats
+    cpuStats: CpuStats
+    precpuStats: CpuStats
+}
+
+type CpuStats {
+    cpuUsage: CpuUsage
+    systemCpuUsage: Long
+    throttlingData: ThrottlingData
+}
+
+type ThrottlingData {
+    periods: Long
+    throttledPeriods: Long
+    throttledTime: Long
+}
+
+type CpuUsage {
+    totalUsage: Long
+    percpuUsage: [Long]
+    usageInKernelmode: Long
+    usageInUsermode: Long
+}
+
+type NetworkStats {
+    rxBytes: Long
+    rxPackets: Long
+    rxDropped: Long
+    rxErrors: Long
+    txBytes: Long
+    txPackets: Long
+    txDropped: Long
+    txErrors: Long
+}
+
+#type BlockIoStats {
+#
+#}
+
+type MemoryStats {
+    stats: Stats
+    maxUsage: Long
+    usage: Long
+    failcnt: Long
+    limit: Long
+}
+
+type Stats {
+    activeFile: Long
+    totalActiveFile: Long
+    inactiveFile: Long
+    totalInactiveFile: Long
+    cache: Long
+    totalCache: Long
+    activeAnon: Long
+    totalActiveAnon: Long
+    inactiveAnon: Long
+    totalInactiveAnon: Long
+    hierarchicalMemoryLimit: BigInteger
+    mappedFile: Long
+    totalMappedFile: Long
+    pgmajfault: Long
+    totalPgmajfault: Long
+    pgpgin: Long
+    totalPgpgin: Long
+    pgpgout: Long
+    totalPgpgout: Long
+    pgfault: Long
+    totalPgfault: Long
+    rss: Long
+    totalRss: Long
+    rssHuge: Long
+    totalRssHuge: Long
+    unevictable: Long
+    totalUnevictable: Long
+    totalWriteback: Long
+    writeback: Long
 }
 
 type Container {
@@ -133,6 +225,11 @@ type Container {
     labels: StringStringMap
     sizeRw: Long
     sizeRootFs: Long
+
+    details: ContainerFullDetails
+    processes(ps_args: String): TopResults
+    stats: ContainerStats
+    logs(follow: Boolean, stdout: Boolean, stderr: Boolean, since: Int, timestamps: Boolean, lines: Int, customParams: StringStringMap): String
 #    hostConfig: HostConfig
 #    NetworkSettings: NetworkSettings
 #    Mounts: List<Mount>
@@ -373,7 +470,7 @@ input ContainerFilter {
     network: String
     publish: String
     since: String
-    status: ContainerStatus
+    status: [ContainerStatus]
     volume: String
 }
 

@@ -10,6 +10,7 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import graphql.servlet.SimpleGraphQLServlet
+import org.rm3l.docker_api_graphql.resolver.ContainerResolver
 import org.rm3l.docker_api_graphql.resolver.Query
 import org.rm3l.docker_api_graphql.scalars.Date
 import org.rm3l.docker_api_graphql.scalars.StringSet
@@ -50,7 +51,8 @@ class DockerApiGraphqlConfiguration {
                 .dictionary("SwarmClusterVersion", Version::class.java)
                 .dictionary("ContainerFullDetails", ContainerInfo::class.java)
                 .scalars(Date(), StringStringMap(), StringSet())
-                .resolvers(Query(dockerClient))
+                .resolvers(Query(dockerClient),
+                        ContainerResolver(dockerClient))
                 .build()
                 .makeExecutableSchema()
     }

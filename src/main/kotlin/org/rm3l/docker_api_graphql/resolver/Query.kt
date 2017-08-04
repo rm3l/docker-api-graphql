@@ -2,6 +2,7 @@ package org.rm3l.docker_api_graphql.resolver
 
 import com.coxautodev.graphql.tools.GraphQLRootResolver
 import com.spotify.docker.client.DefaultDockerClient
+import com.spotify.docker.client.DockerClient
 import com.spotify.docker.client.DockerClient.ListContainersParam.allContainers
 import com.spotify.docker.client.DockerClient.ListContainersParam.containersCreatedBefore
 import com.spotify.docker.client.DockerClient.ListContainersParam.containersCreatedSince
@@ -9,6 +10,7 @@ import com.spotify.docker.client.DockerClient.ListContainersParam.filter
 import com.spotify.docker.client.DockerClient.ListContainersParam.limitContainers
 import com.spotify.docker.client.DockerClient.ListContainersParam.withContainerSizes
 import com.spotify.docker.client.DockerClient.ListContainersParam.withExitStatus
+import com.spotify.docker.client.messages.Container
 import org.rm3l.docker_api_graphql.configuration.DockerApiGraphqlConfiguration
 import org.rm3l.docker_api_graphql.resources.ContainerDetails
 import org.rm3l.docker_api_graphql.resources.ContainerFilter
@@ -24,9 +26,8 @@ class Query(val dockerClient: DefaultDockerClient): GraphQLRootResolver {
         return HostInfo(dockerClient.info(), dockerClient.version())
     }
 
-    fun containers(details: Boolean?,
-                   all: Boolean?, limit: Int?, size: Boolean?, filter: ContainerFilter?):
-            List<ContainerDetails> {
+    fun containers(all: Boolean?, limit: Int?, size: Boolean?, filter: ContainerFilter?):
+            List<Container> {
         logger.trace("containers()")
         val listOfParams = mutableListOf(allContainers(all ?: false))
         limit?.let { listOfParams.add(limitContainers(it)) }
@@ -45,15 +46,9 @@ class Query(val dockerClient: DefaultDockerClient): GraphQLRootResolver {
             it.network?.let { listOfParams.add(filter("network", it)) }
             it.publish?.let { listOfParams.add(filter("publish", it)) }
             it.since?.let { listOfParams.add(containersCreatedSince(it)) }
-            it.status?.let { listOfParams.add(filter("status", it.name)) }
+            it.status?.forEach { listOfParams.add(filter("status", it.name)) }
             it.volume?.let { listOfParams.add(filter("volume", it)) }
         }
-        val containers = dockerClient.listContainers(*listOfParams.toTypedArray())
-        val containerDetails = mutableListOf<ContainerDetails>()
-        containers?.forEach {
-            val containerInfo = if (details?:false) dockerClient.inspectContainer(it.id()) else null
-            containerDetails.add(ContainerDetails(it, containerInfo))
-        }
-        return listOf(*containerDetails.toTypedArray())
+        return dockerClient.listContainers(*listOfParams.toTypedArray())
     }
 }
