@@ -1,9 +1,18 @@
 package org.rm3l.docker_api_graphql.resources
 
+import com.spotify.docker.client.messages.Container
+import com.spotify.docker.client.messages.ContainerInfo
 import com.spotify.docker.client.messages.Info
 import com.spotify.docker.client.messages.Version
 
 data class HostInfo(val Info: Info?, val Version: Version?)
+
+data class ContainerDetails(
+        val info: Container?,
+        val details: ContainerInfo?
+) {
+    constructor(info: Container?): this(info, null)
+}
 
 data class ContainerFilter(
         val ancestor: String?,

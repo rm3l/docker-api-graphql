@@ -3,12 +3,14 @@ package org.rm3l.docker_api_graphql.configuration
 import com.coxautodev.graphql.tools.SchemaParser
 import com.spotify.docker.client.DefaultDockerClient
 import com.spotify.docker.client.DockerCertificates
+import com.spotify.docker.client.messages.swarm.Version
 import graphql.schema.GraphQLSchema
 import org.springframework.boot.web.servlet.ServletRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import graphql.servlet.SimpleGraphQLServlet
 import org.rm3l.docker_api_graphql.resolver.Query
+import org.rm3l.docker_api_graphql.scalars.Date
 import org.rm3l.docker_api_graphql.scalars.StringStringMap
 import org.springframework.beans.factory.annotation.Value
 import java.io.File
@@ -43,7 +45,8 @@ class DockerApiGraphqlConfiguration {
     fun graphQLSchema(dockerClient: DefaultDockerClient): GraphQLSchema {
         return SchemaParser.newParser()
                 .file("schema${File.separator}docker.graphqls")
-                .scalars(StringStringMap())
+                .dictionary("SwarmClusterVersion", Version::class.java)
+                .scalars(Date(), StringStringMap())
                 .resolvers(Query(dockerClient))
                 .build()
                 .makeExecutableSchema()

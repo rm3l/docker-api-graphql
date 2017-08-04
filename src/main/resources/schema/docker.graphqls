@@ -1,10 +1,14 @@
+scalar StringStringMap
+scalar Date
+
 schema {
   query: Query
 }
 
 type Query {
   host: HostInfo
-  containers: [Container]
+  containers(details: Boolean, all: Boolean, limit: Int, size: Boolean, filter: ContainerFilter): [ContainerDetails]
+
 }
 
 type HostInfo {
@@ -26,12 +30,96 @@ type Version {
 
 type Info {
     architecture: String
-    #TODO
+    clusterStore: String
+    cgroupDriver: String
+    containers: Int
+    containersRunning: Int
+    containersStopped: Int
+    containersPaused: Int
+    cpuCfsPeriod: Boolean
+    cpuCfsQuota: Boolean
+    debug: Boolean
+    dockerRootDir: String
+    storageDriver: String
+#    driverStatus: [[String]]
+    executionDriver: String
+    experimentalBuild: Boolean
+    httpProxy: String
+    httpsProxy: String
+    id: String
+    ipv4Forwarding: Boolean
+    images: Int
+    indexServerAddress: String
+    initPath: String
+    initSha1: String
+    kernelMemory: Boolean
+    kernelVersion: String
+    labels: [String]
+    memTotal: Long
+    memoryLimit: Boolean
+    cpus: Int
+    eventsListener: Int
+    fileDescriptors: Int
+    goroutines: Int
+    name: String
+    noProxy: String
+    oomKillDisable: Boolean
+    operatingSystem: String
+    osType: String
+    plugins: Plugins
+    registryConfig: RegistryConfig
+    serverVersion: String
+    swapLimit: Boolean
+    swarm: SwarmInfo
+#    systemStatus: [[String]]
+    systemTime: Date
 }
 
-scalar StringStringMap
+type Plugins {
+    volumes: [String]
+    networks: [String]
+}
 
-type Container(all: Boolean, limit: Integer, size: Boolean, filter: StringStringMap) {
+type RegistryConfig {
+    insecureRegistryCidrs: [String]
+#   TODO IndexConfigs
+}
+
+type SwarmInfo {
+    cluster: SwarmCluster
+    controlAvailable: Boolean
+    error: String
+    localNodeState: String
+    nodeAddr: String
+    nodeId: String
+    nodes: Int
+    managers: Int
+    remoteManagers: [RemoteManager]
+}
+
+type SwarmCluster {
+    id: String
+    version: SwarmClusterVersion
+    createdAt: Date
+    updatedAt: Date
+#    swarmSpec: SwarmSpec
+}
+
+type SwarmClusterVersion {
+    index: Long
+}
+
+type RemoteManager {
+    addr: String
+    nodeId: String
+}
+
+type ContainerDetails {
+    info: Container
+    details: ContainerInfo
+}
+
+type Container {
     id: String!
     names: [String]
     image: String
@@ -41,7 +129,7 @@ type Container(all: Boolean, limit: Integer, size: Boolean, filter: StringString
     state: String
     status: String
     ports: [Port]
-#    Labels: StringStringMap
+    labels: StringStringMap
     sizeRw: Long
     sizeRootFs: Long
 #    HostConfig: HostConfig
@@ -49,46 +137,51 @@ type Container(all: Boolean, limit: Integer, size: Boolean, filter: StringString
 #    Mounts: List<Mount>
 }
 
-#type ContainerFilter {
-#    ancestor: String
-#    before: String
-#    expose: String
-#    exited: Integer
-#    health: ContainerHealth
-#    id: String
-#    isolation: ContainerIsolation
-#    is_task: Boolean
-#    label: String
-#    name: String
-#    network: String
-#    publish: String
-#    since: String
-#    status: ContainerStatus
-#    volume: String
-#}
-#
-#enum ContainerHealth {
-#    starting
-#    healthy
-#    unhealthy
-#    none
-#}
-#
-#enum ContainerIsolation {
-#    default
-#    process
-#    hyperv
-#}
-#
-#enum ContainerStatus {
-#    created
-#    restarting
-#    running
-#    removing
-#    paused
-#    exited
-#    dead
-#}
+type ContainerInfo {
+    id: String
+#   TODO
+}
+
+input ContainerFilter {
+    ancestor: String
+    before: String
+    expose: String
+    exited: Int
+    health: ContainerHealth
+    id: String
+    isolation: ContainerIsolation
+    is_task: Boolean
+    label: String
+    name: String
+    network: String
+    publish: String
+    since: String
+    status: ContainerStatus
+    volume: String
+}
+
+enum ContainerHealth {
+    starting
+    healthy
+    unhealthy
+    none
+}
+
+enum ContainerIsolation {
+    default
+    process
+    hyperv
+}
+
+enum ContainerStatus {
+    created
+    restarting
+    running
+    removing
+    paused
+    exited
+    dead
+}
 
 type Port {
     privatePort: Int
