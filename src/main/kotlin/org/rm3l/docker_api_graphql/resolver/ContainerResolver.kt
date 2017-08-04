@@ -3,10 +3,7 @@ package org.rm3l.docker_api_graphql.resolver
 import com.coxautodev.graphql.tools.GraphQLResolver
 import com.spotify.docker.client.DefaultDockerClient
 import com.spotify.docker.client.DockerClient
-import com.spotify.docker.client.messages.Container
-import com.spotify.docker.client.messages.ContainerInfo
-import com.spotify.docker.client.messages.ContainerStats
-import com.spotify.docker.client.messages.TopResults
+import com.spotify.docker.client.messages.*
 
 class ContainerResolver(val dockerClient: DefaultDockerClient):
         GraphQLResolver<Container> {
@@ -57,5 +54,8 @@ class ContainerResolver(val dockerClient: DefaultDockerClient):
 
         return dockerClient.logs(container.id(), *logsParam.toTypedArray())?.readFully()
     }
+
+    fun changes(container: Container): List<ContainerChange> =
+            dockerClient.inspectContainerChanges(container.id())
 
 }

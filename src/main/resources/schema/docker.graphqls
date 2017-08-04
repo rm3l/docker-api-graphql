@@ -1,4 +1,4 @@
-scalar StringStringMap
+scalar StringAnyMap
 scalar StringSet
 scalar Date
 
@@ -7,9 +7,11 @@ schema {
 }
 
 type Query {
-  host: HostInfo
-  containers(all: Boolean, limit: Int, size: Boolean, filter: ContainerFilter): [Container]
-
+    host: HostInfo
+    containers(all: Boolean, limit: Int, size: Boolean, filter: [ContainerFilter]): [Container]
+    images(all: Boolean, digests: Boolean, filters: [ImageFilter]): [Image]
+    searchImagesOnDockerHub(term: String!): [ImageSearchResult]
+    volumes(filters: [VolumeFilter]): VolumeList
 }
 
 type HostInfo {
@@ -47,7 +49,7 @@ type Info {
     experimentalBuild: Boolean
     httpProxy: String
     httpsProxy: String
-    id: String
+    id: ID!
     ipv4Forwarding: Boolean
     images: Int
     indexServerAddress: String
@@ -99,7 +101,7 @@ type SwarmInfo {
 }
 
 type SwarmCluster {
-    id: String
+    id: ID!
     version: SwarmClusterVersion
     createdAt: Date
     updatedAt: Date
@@ -114,14 +116,6 @@ type RemoteManager {
     addr: String
     nodeId: String
 }
-
-#type ContainerDetails {
-#    info: Container
-#    details: ContainerFullDetails
-#    processes(psArgs: String): TopResults
-#    stats: ContainerStats
-#    logs(follow: Boolean, stdout: Boolean, stderr: Boolean, since: Int, timestamps: Boolean, lines: Int, customParams: StringStringMap): String
-#}
 
 type TopResults {
     titles: [String]
@@ -213,7 +207,7 @@ type Stats {
 }
 
 type Container {
-    id: String!
+    id: ID!
     names: [String]
     image: String
     imageId: String
@@ -222,21 +216,29 @@ type Container {
     state: String
     status: String
     ports: [Port]
-    labels: StringStringMap
+    labels: StringAnyMap
     sizeRw: Long
     sizeRootFs: Long
 
-    details: ContainerFullDetails
+    details: ContainerDetails
     processes(ps_args: String): TopResults
     stats: ContainerStats
-    logs(follow: Boolean, stdout: Boolean, stderr: Boolean, since: Int, timestamps: Boolean, lines: Int, customParams: StringStringMap): String
+    logs(follow: Boolean, stdout: Boolean, stderr: Boolean, since: Int, timestamps: Boolean, lines: Int, customParams: StringAnyMap): String
+    changes: [ContainerChange]
+
+    
 #    hostConfig: HostConfig
 #    NetworkSettings: NetworkSettings
 #    Mounts: List<Mount>
 }
 
-type ContainerFullDetails {
-    id: String
+type ContainerChange {
+    path: String
+    kind: Int
+}
+
+type ContainerDetails {
+    id: ID!
     created: Date
     path: String
     args: [String]
@@ -253,7 +255,7 @@ type ContainerFullDetails {
     execDriver: String
     processLabel: String
     mountLabel: String
-    volumes: StringStringMap
+    volumes: StringAnyMap
 #    volumesRw: StringBooleanMap
     appArmorProfile: String
     execIds: [String]
@@ -264,7 +266,7 @@ type ContainerFullDetails {
 }
 
 type Node {
-    id: String
+    id: ID!
     ip: String
     addr: String
     name: String
@@ -373,9 +375,9 @@ type HostConfig {
     oomScoreAdj: Int
     autoRemove: Boolean
     pidsLimit: Int
-    tmpfs: StringStringMap
+    tmpfs: StringAnyMap
     readonlyRootfs: Boolean
-    storageOpt: StringStringMap
+    storageOpt: StringAnyMap
 }
 
 type Ulimit {
@@ -386,7 +388,7 @@ type Ulimit {
 
 type LogConfig {
     logType: String
-    logOptions: StringStringMap
+    logOptions: StringAnyMap
 }
 
 type RestartPolicy {
@@ -436,7 +438,7 @@ type ContainerConfig {
     entrypoint: [String]
     networkDisabled: Boolean
     onBuild: [String]
-    labels: StringStringMap
+    labels: StringAnyMap
     macAddress: String
     hostConfig: HostConfig
     stopSignal: String
@@ -501,4 +503,87 @@ type Port {
     privatePort: Int
     publicPort: Int
     type: String
+}
+
+type Image {
+    created: String
+    id: ID!
+    parentId: String
+    repoTags: [String]
+    repoDigests: [String]
+    size: Long
+    virtualSize: Long
+    labels: StringAnyMap
+
+    details: ImageDetails
+    history: [ImageHistory]
+}
+
+input ImageFilter {
+    before: String
+    dangling: Boolean
+    label: String
+    reference: String
+    since: String
+}
+
+type ImageDetails {
+    id: ID!
+    parent: String
+    comment: String
+    created: Date
+    container: String
+    containerConfig: ContainerConfig
+    dockerVersion: String
+    author: String
+    config: ContainerConfig
+    architecture: String
+    os: String
+    size: Long
+    virtualSize: String
+    rootFs: RootFs
+}
+
+type RootFs {
+    type: String
+    layers: [String]
+}
+
+type ImageHistory {
+    id: ID!
+    created: Long
+    createdBy: String
+    tags: [String]
+    size: Long
+    comment: String
+}
+
+type ImageSearchResult {
+    description: String
+    official: Boolean
+    automated: Boolean
+    name: String
+    starCount: Int
+}
+
+type VolumeList {
+    volumes: [Volume]
+    warnings: [String]
+}
+
+type Volume {
+    name: String
+    driver: String
+    driverOpts: StringAnyMap
+    labels: StringAnyMap
+    mountpoint: String
+    scope: String
+    status: StringAnyMap
+}
+
+input VolumeFilter {
+    dangling: Boolean
+    driver: String
+    label: String
+    name: String
 }

@@ -11,28 +11,25 @@ import com.spotify.docker.client.DockerClient.ListContainersParam.limitContainer
 import com.spotify.docker.client.DockerClient.ListContainersParam.withContainerSizes
 import com.spotify.docker.client.DockerClient.ListContainersParam.withExitStatus
 import com.spotify.docker.client.messages.Container
-import org.rm3l.docker_api_graphql.configuration.DockerApiGraphqlConfiguration
-import org.rm3l.docker_api_graphql.resources.ContainerDetails
+import com.spotify.docker.client.messages.Image
+import com.spotify.docker.client.messages.ImageSearchResult
+import com.spotify.docker.client.messages.VolumeList
 import org.rm3l.docker_api_graphql.resources.ContainerFilter
 import org.rm3l.docker_api_graphql.resources.HostInfo
-import org.slf4j.LoggerFactory
+import org.rm3l.docker_api_graphql.resources.ImageFilter
+import org.rm3l.docker_api_graphql.resources.VolumeFilter
 
 class Query(val dockerClient: DefaultDockerClient): GraphQLRootResolver {
 
-    private val logger = LoggerFactory.getLogger(DockerApiGraphqlConfiguration::class.java)
+    fun host(): HostInfo =
+            HostInfo(dockerClient.info(), dockerClient.version())
 
-    fun host(): HostInfo {
-        logger.trace("host()")
-        return HostInfo(dockerClient.info(), dockerClient.version())
-    }
-
-    fun containers(all: Boolean?, limit: Int?, size: Boolean?, filter: ContainerFilter?):
+    fun containers(all: Boolean?, limit: Int?, size: Boolean?, filter: List<ContainerFilter>?):
             List<Container> {
-        logger.trace("containers()")
         val listOfParams = mutableListOf(allContainers(all ?: false))
         limit?.let { listOfParams.add(limitContainers(it)) }
         size?.let { listOfParams.add(withContainerSizes(it)) }
-        filter?.let {
+        filter?.forEach {
             it.ancestor?.let { listOfParams.add(filter("ancestor", it)) }
             it.before?.let { listOfParams.add(containersCreatedBefore(it)) }
             it.expose?.let { listOfParams.add(filter("expose", it)) }
@@ -50,5 +47,34 @@ class Query(val dockerClient: DefaultDockerClient): GraphQLRootResolver {
             it.volume?.let { listOfParams.add(filter("volume", it)) }
         }
         return dockerClient.listContainers(*listOfParams.toTypedArray())
+    }
+
+    fun images(all: Boolean?, digests: Boolean?, filters: List<ImageFilter>?): List<Image> {
+        val listOfParams = mutableListOf(DockerClient.ListImagesParam.allImages(all ?: false))
+        if (digests?:false) {
+            listOfParams.add(DockerClient.ListImagesParam.digests())
+        }
+        filters?.forEach {
+            it.before?.let { listOfParams.add(DockerClient.ListImagesParam.create("before", it)) }
+            it.dangling?.let { listOfParams.add(DockerClient.ListImagesParam.danglingImages(it)) }
+            it.label?.let { listOfParams.add(DockerClient.ListImagesParam.create("label", it)) }
+            it.reference?.let { listOfParams.add(DockerClient.ListImagesParam.create("reference", it)) }
+            it.since?.let { listOfParams.add(DockerClient.ListImagesParam.create("since", it)) }
+        }
+        return dockerClient.listImages(*listOfParams.toTypedArray())
+    }
+
+    fun searchImagesOnDockerHub(term: String): List<ImageSearchResult> =
+            dockerClient.searchImages(term)
+
+    fun volumes(filters: List<VolumeFilter>?): VolumeList {
+        val listOfParams = mutableListOf<DockerClient.ListVolumesParam>()
+        filters?.forEach {
+            it.dangling?.let { listOfParams.add(DockerClient.ListVolumesParam.dangling(it)) }
+            it.driver?.let { listOfParams.add(DockerClient.ListVolumesParam.driver(it)) }
+            it.name?.let { listOfParams.add(DockerClient.ListVolumesParam.name(it)) }
+            it.label?.let { listOfParams.add(DockerClient.ListVolumesParam.filter("label", it)) }
+        }
+        return dockerClient.listVolumes(*listOfParams.toTypedArray())
     }
 }

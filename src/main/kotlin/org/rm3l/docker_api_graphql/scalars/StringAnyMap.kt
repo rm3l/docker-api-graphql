@@ -5,16 +5,16 @@ import graphql.language.StringValue
 import graphql.schema.Coercing
 import graphql.schema.GraphQLScalarType
 
-class StringStringMap :
-        GraphQLScalarType("StringStringMap", "Map<String,String>", StringStringMapCoercing())
+class StringAnyMap :
+        GraphQLScalarType("StringAnyMap", "Map<String,String>", StringAnyMapCoercing())
 
-private class StringStringMapCoercing: Coercing<Map<String, String>?, Map<String,String>?> {
+private class StringAnyMapCoercing : Coercing<Map<String, Any>?, Map<String, Any>?> {
 
     @Suppress("UNCHECKED_CAST")
-    private fun convertImpl(input: Any?): Map<String, String>? {
+    private fun convertImpl(input: Any?): Map<String, Any>? {
         if (input is String) {
             try {
-                return ObjectMapper().readValue(input, Map::class.java) as Map<String, String>?
+                return ObjectMapper().readValue(input, Map::class.java) as Map<String, Any>?
             } catch (e: Exception) {
                 return null
             }
@@ -29,19 +29,19 @@ private class StringStringMapCoercing: Coercing<Map<String, String>?, Map<String
     }
 
     // value sent to the client
-    override fun serialize(input: Any?): Map<String, String>? {
+    override fun serialize(input: Any?): Map<String, Any>? {
         return convertImpl(input) ?:
-                throw IllegalArgumentException("Invalid input '$input' for Map<String,String>")
+                throw IllegalArgumentException("Invalid input '$input' for Map<String,Any>")
     }
 
     // value from the client
-    override fun parseValue(input: Any?): Map<String, String>? {
+    override fun parseValue(input: Any?): Map<String, Any>? {
         return convertImpl(input) ?:
-                throw IllegalArgumentException("Invalid input '$input' for Map<String,String>")
+                throw IllegalArgumentException("Invalid input '$input' for Map<String,Any>")
     }
 
     @Suppress("UNCHECKED_CAST")
-    override fun parseLiteral(input: Any?): Map<String, String>? {
+    override fun parseLiteral(input: Any?): Map<String, Any>? {
         if (input is StringValue) {
             return convertImpl(input.value)
         }

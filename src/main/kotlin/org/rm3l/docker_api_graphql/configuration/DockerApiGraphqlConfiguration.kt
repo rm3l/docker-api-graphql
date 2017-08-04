@@ -4,6 +4,7 @@ import com.coxautodev.graphql.tools.SchemaParser
 import com.spotify.docker.client.DefaultDockerClient
 import com.spotify.docker.client.DockerCertificates
 import com.spotify.docker.client.messages.ContainerInfo
+import com.spotify.docker.client.messages.ImageInfo
 import com.spotify.docker.client.messages.swarm.Version
 import graphql.schema.GraphQLSchema
 import org.springframework.boot.web.servlet.ServletRegistrationBean
@@ -11,10 +12,11 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import graphql.servlet.SimpleGraphQLServlet
 import org.rm3l.docker_api_graphql.resolver.ContainerResolver
+import org.rm3l.docker_api_graphql.resolver.ImageResolver
 import org.rm3l.docker_api_graphql.resolver.Query
 import org.rm3l.docker_api_graphql.scalars.Date
 import org.rm3l.docker_api_graphql.scalars.StringSet
-import org.rm3l.docker_api_graphql.scalars.StringStringMap
+import org.rm3l.docker_api_graphql.scalars.StringAnyMap
 import org.springframework.beans.factory.annotation.Value
 import java.io.File
 import java.net.URI
@@ -49,10 +51,12 @@ class DockerApiGraphqlConfiguration {
         return SchemaParser.newParser()
                 .file("schema${File.separator}docker.graphqls")
                 .dictionary("SwarmClusterVersion", Version::class.java)
-                .dictionary("ContainerFullDetails", ContainerInfo::class.java)
-                .scalars(Date(), StringStringMap(), StringSet())
+                .dictionary("ContainerDetails", ContainerInfo::class.java)
+                .dictionary("ImageDetails", ImageInfo::class.java)
+                .scalars(Date(), StringAnyMap(), StringSet())
                 .resolvers(Query(dockerClient),
-                        ContainerResolver(dockerClient))
+                        ContainerResolver(dockerClient),
+                        ImageResolver(dockerClient))
                 .build()
                 .makeExecutableSchema()
     }
