@@ -1,4 +1,5 @@
 scalar StringStringMap
+scalar StringSet
 scalar Date
 
 schema {
@@ -116,7 +117,7 @@ type RemoteManager {
 
 type ContainerDetails {
     info: Container
-    details: ContainerInfo
+    details: ContainerFullDetails
 }
 
 type Container {
@@ -132,14 +133,230 @@ type Container {
     labels: StringStringMap
     sizeRw: Long
     sizeRootFs: Long
-#    HostConfig: HostConfig
+#    hostConfig: HostConfig
 #    NetworkSettings: NetworkSettings
 #    Mounts: List<Mount>
 }
 
-type ContainerInfo {
+type ContainerFullDetails {
     id: String
-#   TODO
+    created: Date
+    path: String
+    args: [String]
+    config: ContainerConfig
+    hostConfig: HostConfig
+    state: ContainerState
+    image: String
+    networkSettings: NetworkSettings
+    resolvConfPath: String
+    hostnamePath: String
+    hostsPath: String
+    name: String
+    driver: String
+    execDriver: String
+    processLabel: String
+    mountLabel: String
+    volumes: StringStringMap
+#    volumesRw: StringBooleanMap
+    appArmorProfile: String
+    execIds: [String]
+    logPath: String
+    restartCount: Long
+    mounts: [ContainerMount]
+    node: Node
+}
+
+type Node {
+    id: String
+    ip: String
+    addr: String
+    name: String
+}
+
+type ContainerMount {
+    type: String
+    name: String
+    source: String
+    destination: String
+    driver: String
+    mode: String
+    rw: Boolean
+    propagation: String
+}
+
+type NetworkSettings {
+    ipAddress: String
+    ipPrefixLen: Int
+    gateway: String
+    bridge: String
+#    portMapping: ImmutableMap<String, Map<String, String>>
+#    ports: ImmutableMap<String, List<PortBinding>>
+    macAddress: String
+#    networks: ImmutableMap<String, AttachedNetwork>
+    endpointId: String
+    sandboxId: String
+    sandboxKey: String
+    hairpinMode: Boolean
+    linkLocalIPv6Address: String
+    linkLocalIPv6PrefixLen: Int
+    globalIPv6Address: String
+    globalIPv6PrefixLen: Int
+    ipv6Gateway: String
+}
+
+type ContainerState {
+    status: String
+    running: Boolean
+    paused: Boolean
+    restarting: Boolean
+    pid: Int
+    exitCode: Int
+    startedAt: Date
+    finishedAt: Date
+    error: String
+    oomKilled: Boolean
+    health: Health
+}
+
+type Health {
+    status: String
+    failingStreak: Int
+    log: [HealthLog]
+}
+
+type HealthLog {
+    start: Date
+    end: Date
+    exitCode: Int
+    output: String
+}
+
+type HostConfig {
+    binds: [String]
+    blkioWeight: Int
+    blkioWeightDevice: [BlkioWeightDevice]
+    blkioDeviceReadBps: [BlkioDeviceRate]
+    blkioDeviceWriteBps: [BlkioDeviceRate]
+    blkioDeviceReadIOps: [BlkioDeviceRate]
+    blkioDeviceWriteIOps: [BlkioDeviceRate]
+    containerIdFile: String
+    lxcConf: [LxcConfParameter]
+    privileged: Boolean
+#    portBindings: Map<String, List<PortBinding>>
+    links: [String]
+    publishAllPorts: Boolean
+    dns: [String]
+    dnsOptions: [String]
+    dnsSearch: [String]
+    extraHosts: [String]
+    volumesFrom: [String]
+    capAdd: [String]
+    capDrop: [String]
+    networkMode: String
+    securityOpt: [String]
+    devices: [Device]
+    memory: Long
+    memorySwap: Long
+    memorySwappiness: Int
+    memoryReservation: Long
+    nanoCpus: Long
+    cpuPeriod: Long
+    cpuShares: Long
+    cpusetCpus: String
+    cpusetMems: String
+    cpuQuota: Long
+    cgroupParent: String
+    restartPolicy: RestartPolicy
+    logConfig: LogConfig
+    ipcMode: String
+    ulimits: [Ulimit]
+    pidMode: String
+    shmSize: Long
+    oomKillDisable: Boolean
+    oomScoreAdj: Int
+    autoRemove: Boolean
+    pidsLimit: Int
+    tmpfs: StringStringMap
+    readonlyRootfs: Boolean
+    storageOpt: StringStringMap
+}
+
+type Ulimit {
+    name: String
+    soft: Long
+    hard: Long
+}
+
+type LogConfig {
+    logType: String
+    logOptions: StringStringMap
+}
+
+type RestartPolicy {
+    name: String
+    maxRetryCount: Int
+}
+
+type Device {
+    pathOnHost: String
+    pathInContainer: String
+    cgroupPermissions: String
+}
+
+type LxcConfParameter {
+    key: String
+    value: String
+}
+
+type BlkioDeviceRate {
+    path: String
+    rate: Int
+}
+
+type BlkioWeightDevice {
+    path: String
+    weight: Int
+}
+
+type ContainerConfig {
+    hostname: String
+    domainname: String
+    user: String
+    attachStdin: Boolean
+    attachStdout: Boolean
+    attachStderr: Boolean
+    portSpecs: [String]
+    exposedPorts: StringSet
+    tty: Boolean
+    openStdin: Boolean
+    stdinOnce: Boolean
+    env: [String]
+    cmd: [String]
+    image: String
+    volumeNames: StringSet
+#    volumes: Map<String, Map>
+    workingDir: String
+    entrypoint: [String]
+    networkDisabled: Boolean
+    onBuild: [String]
+    labels: StringStringMap
+    macAddress: String
+    hostConfig: HostConfig
+    stopSignal: String
+    healthcheck: Healthcheck
+#    networkingConfig: NetworkingConfig
+}
+
+#type NetworkingConfig {
+#   endpointsConfig: ImmutableMap<String, EndpointConfig>
+#}
+
+type Healthcheck {
+    test: [String]
+    interval: Long
+    timeout: Long
+    retries: Int
+    startPeriod: Long
 }
 
 input ContainerFilter {

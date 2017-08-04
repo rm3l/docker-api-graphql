@@ -2,12 +2,13 @@ package org.rm3l.docker_api_graphql.resolver
 
 import com.coxautodev.graphql.tools.GraphQLRootResolver
 import com.spotify.docker.client.DefaultDockerClient
-import com.spotify.docker.client.DockerClient
 import com.spotify.docker.client.DockerClient.ListContainersParam.allContainers
+import com.spotify.docker.client.DockerClient.ListContainersParam.containersCreatedBefore
+import com.spotify.docker.client.DockerClient.ListContainersParam.containersCreatedSince
+import com.spotify.docker.client.DockerClient.ListContainersParam.filter
 import com.spotify.docker.client.DockerClient.ListContainersParam.limitContainers
 import com.spotify.docker.client.DockerClient.ListContainersParam.withContainerSizes
-import com.spotify.docker.client.DockerClient.ListContainersParam.create
-import com.spotify.docker.client.messages.Container
+import com.spotify.docker.client.DockerClient.ListContainersParam.withExitStatus
 import org.rm3l.docker_api_graphql.configuration.DockerApiGraphqlConfiguration
 import org.rm3l.docker_api_graphql.resources.ContainerDetails
 import org.rm3l.docker_api_graphql.resources.ContainerFilter
@@ -31,22 +32,21 @@ class Query(val dockerClient: DefaultDockerClient): GraphQLRootResolver {
         limit?.let { listOfParams.add(limitContainers(it)) }
         size?.let { listOfParams.add(withContainerSizes(it)) }
         filter?.let {
-            it.ancestor?.let { listOfParams.add(DockerClient.ListContainersParam.filter("ancestor", it)) }
-            it.before?.let { listOfParams.add(DockerClient.ListContainersParam.containersCreatedBefore(it)) }
-            it.expose?.let { listOfParams.add(DockerClient.ListContainersParam.filter("expose", it)) }
-            it.exited?.let { listOfParams.add(DockerClient.ListContainersParam.withExitStatus(it)) }
-            it.health?.let { listOfParams.add(DockerClient.ListContainersParam.filter("health", it.name)) }
-            it.id?.let { listOfParams.add(DockerClient.ListContainersParam.filter("id", it)) }
-            it.isolation?.let { listOfParams.add(DockerClient.ListContainersParam.filter("isolation", it.name)) }
-            it.is_task?.let { listOfParams.add(DockerClient.ListContainersParam.filter("is-task",
-                    if (it) "true" else "false")) }
-            it.label?.let { listOfParams.add(DockerClient.ListContainersParam.filter("label", it)) }
-            it.name?.let { listOfParams.add(DockerClient.ListContainersParam.filter("name", it)) }
-            it.network?.let { listOfParams.add(DockerClient.ListContainersParam.filter("network", it)) }
-            it.publish?.let { listOfParams.add(DockerClient.ListContainersParam.filter("publish", it)) }
-            it.since?.let { listOfParams.add(DockerClient.ListContainersParam.containersCreatedSince(it)) }
-            it.status?.let { listOfParams.add(DockerClient.ListContainersParam.filter("status", it.name)) }
-            it.volume?.let { listOfParams.add(DockerClient.ListContainersParam.filter("volume", it)) }
+            it.ancestor?.let { listOfParams.add(filter("ancestor", it)) }
+            it.before?.let { listOfParams.add(containersCreatedBefore(it)) }
+            it.expose?.let { listOfParams.add(filter("expose", it)) }
+            it.exited?.let { listOfParams.add(withExitStatus(it)) }
+            it.health?.let { listOfParams.add(filter("health", it.name)) }
+            it.id?.let { listOfParams.add(filter("id", it)) }
+            it.isolation?.let { listOfParams.add(filter("isolation", it.name)) }
+            it.is_task?.let { listOfParams.add(filter("is-task", if (it) "true" else "false")) }
+            it.label?.let { listOfParams.add(filter("label", it)) }
+            it.name?.let { listOfParams.add(filter("name", it)) }
+            it.network?.let { listOfParams.add(filter("network", it)) }
+            it.publish?.let { listOfParams.add(filter("publish", it)) }
+            it.since?.let { listOfParams.add(containersCreatedSince(it)) }
+            it.status?.let { listOfParams.add(filter("status", it.name)) }
+            it.volume?.let { listOfParams.add(filter("volume", it)) }
         }
         val containers = dockerClient.listContainers(*listOfParams.toTypedArray())
         val containerDetails = mutableListOf<ContainerDetails>()
