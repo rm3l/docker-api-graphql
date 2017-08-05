@@ -47,7 +47,7 @@ class DockerApiGraphqlConfiguration {
     fun graphQLSchema(dockerClient: DefaultDockerClient): GraphQLSchema {
         return SchemaParser.newParser()
                 .file("schema${File.separator}docker.graphqls")
-                .dictionary("HostVersion", com.spotify.docker.client.messages.Version::class.java)
+                .dictionary("SystemVersion", com.spotify.docker.client.messages.Version::class.java)
                 .dictionary("ContainerDetails", ContainerInfo::class.java)
                 .dictionary("ImageDetails", ImageInfo::class.java)
                 .dictionary("SwarmVersion", com.spotify.docker.client.messages.swarm.Version::class.java)

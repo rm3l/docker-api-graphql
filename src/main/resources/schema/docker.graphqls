@@ -7,7 +7,7 @@ schema {
 }
 
 type Query {
-    host: HostInfo
+    system: System
     swarm: Swarm
     containers(all: Boolean, limit: Int, size: Boolean, filter: ContainerFilter): [Container]
     images(all: Boolean, digests: Boolean, filter: ImageFilter): [Image]
@@ -16,12 +16,12 @@ type Query {
     networks(filter: NetworkFilter): [Network]
 }
 
-type HostInfo {
-    version: HostVersion!
-    info: Info!
+type System {
+    version: SystemVersion!
+    info: SystemInfo!
 }
 
-type HostVersion {
+type SystemVersion {
     apiVersion: String!
     arch: String!
     buildTime: String!
@@ -33,7 +33,7 @@ type HostVersion {
 #    experimental: Boolean!
 }
 
-type Info {
+type SystemInfo {
     architecture: String
     clusterStore: String
     cgroupDriver: String
@@ -87,7 +87,7 @@ type Plugins {
 
 type RegistryConfig {
     insecureRegistryCidrs: [String]
-#   TODO IndexConfigs
+    indexConfigs: StringAnyMap
 }
 
 type SwarmInfo {
@@ -107,7 +107,7 @@ type SwarmCluster {
     version: SwarmVersion
     createdAt: Date
     updatedAt: Date
-#    swarmSpec: SwarmSpec
+    swarmSpec: SwarmSpec
 }
 
 type SwarmVersion {
@@ -127,7 +127,7 @@ type TopResults {
 type ContainerStats {
     read: Date
     network: NetworkStats
-#    networks: ImmutableMap<String, NetworkStats>
+    networks: StringAnyMap
     memoryStats: MemoryStats
 #    blockIoStats: BlockIoStats
     cpuStats: CpuStats
@@ -217,10 +217,12 @@ type Container {
     created: Long
     state: String
     status: String
-    ports: [Port]
+    ports: [PortMapping]
     labels: StringAnyMap
     sizeRw: Long
     sizeRootFs: Long
+    networkSettings: NetworkSettings
+    mounts: [ContainerMount]
 
     details: ContainerDetails
     processes(ps_args: String): TopResults
@@ -228,10 +230,7 @@ type Container {
     logs(follow: Boolean, stdout: Boolean, stderr: Boolean, since: Int, timestamps: Boolean, lines: Int, customParams: StringAnyMap): String
     changes: [ContainerChange]
 
-    
-#    hostConfig: HostConfig
-#    NetworkSettings: NetworkSettings
-#    Mounts: List<Mount>
+    portsAsString: String
 }
 
 type ContainerChange {
@@ -258,7 +257,7 @@ type ContainerDetails {
     processLabel: String
     mountLabel: String
     volumes: StringAnyMap
-#    volumesRw: StringBooleanMap
+    volumesRw: StringAnyMap
     appArmorProfile: String
     execIds: [String]
     logPath: String
@@ -290,10 +289,10 @@ type NetworkSettings {
     ipPrefixLen: Int
     gateway: String
     bridge: String
-#    portMapping: ImmutableMap<String, Map<String, String>>
-#    ports: ImmutableMap<String, List<PortBinding>>
+    portMapping: StringAnyMap
+    ports: StringAnyMap
     macAddress: String
-#    networks: ImmutableMap<String, AttachedNetwork>
+    networks: StringAnyMap
     endpointId: String
     sandboxId: String
     sandboxKey: String
@@ -343,7 +342,7 @@ type HostConfig {
     containerIdFile: String
     lxcConf: [LxcConfParameter]
     privileged: Boolean
-#    portBindings: Map<String, List<PortBinding>>
+    portBindings: StringAnyMap
     links: [String]
     publishAllPorts: Boolean
     dns: [String]
@@ -435,7 +434,7 @@ type ContainerConfig {
     cmd: [String]
     image: String
     volumeNames: StringSet
-#    volumes: Map<String, Map>
+    volumes: StringAnyMap
     workingDir: String
     entrypoint: [String]
     networkDisabled: Boolean
@@ -445,12 +444,12 @@ type ContainerConfig {
     hostConfig: HostConfig
     stopSignal: String
     healthcheck: Healthcheck
-#    networkingConfig: NetworkingConfig
+    networkingConfig: NetworkingConfig
 }
 
-#type NetworkingConfig {
-#   endpointsConfig: ImmutableMap<String, EndpointConfig>
-#}
+type NetworkingConfig {
+   endpointsConfig: StringAnyMap
+}
 
 type Healthcheck {
     test: [String]
@@ -501,10 +500,11 @@ enum ContainerStatus {
     dead
 }
 
-type Port {
+type PortMapping {
     privatePort: Int
     publicPort: Int
     type: String
+    ip: String
 }
 
 type Image {
@@ -766,11 +766,11 @@ type ManagerStatus {
 }
 
 input NodeFilter {
-    id: String
-    label: String
-    membership: NodeMembership
-    name: String
-    role: NodeRole
+    id: [String]
+    label: [String]
+    membership: [NodeMembership]
+    name: [String]
+    role: [NodeRole]
 }
 
 enum NodeMembership {

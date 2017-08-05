@@ -2,7 +2,7 @@ package org.rm3l.docker_api_graphql.resources
 
 import com.spotify.docker.client.messages.*
 
-data class HostInfo(val Info: Info?, val Version: Version?)
+data class System(val Info: Info?, val Version: Version?)
 
 data class ContainerFilter(
         val ancestor: List<String>?,
