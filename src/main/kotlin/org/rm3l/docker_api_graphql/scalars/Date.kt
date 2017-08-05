@@ -35,5 +35,4 @@ class Date: GraphQLScalarType("Date", "Date Scalar",
         return null
     }
 
-}) {
-}
+})

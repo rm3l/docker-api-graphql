@@ -1,6 +1,4 @@
-#Schema
 schema {
-    # Query
     query: Query
 }
 
@@ -8,24 +6,29 @@ schema {
 type Query {
     # System-wide information
     system: System
-    # Engines can be clustered together in a swarm. This returns more details about the Swarm. Requires Docker API >= 1.24
+
+    # Return more details about the Swarm. Requires Docker API >= 1.24
     swarm: Swarm
-    # List containers with various filters
+
+    # List containers matching various filters
     containers(
-        # all containers, whatever their state
         all: Boolean,
-        # limit of the list returned
         limit: Int,
         size: Boolean,
         filter: ContainerFilter): [Container]
+
+    # List images matching various filters
     images(
         all: Boolean,
         digests: Boolean,
         filter: ImageFilter): [Image]
-    searchImagesOnDockerHub(
-        term: String!): [ImageSearchResult]
-    volumes(
-        filter: VolumeFilter): VolumeList
-    networks(
-        filter: NetworkFilter): [Network]
+
+    # Search images on Docker Hub
+    searchImagesOnDockerHub(term: String!): [ImageSearchResult]
+
+    # List volumes matching various filters
+    volumes(filter: VolumeFilter): VolumeList
+
+    # List networks matching various filters
+    networks(filter: NetworkFilter): [Network]
 }

@@ -11,6 +11,7 @@ class StringSet: GraphQLScalarType("StringSet", "StringSet",
         object: Coercing<List<String?>?, Set<String?>?> {
 
     // value sent to the client
+    @Suppress("UNCHECKED_CAST")
     override fun serialize(input: Any?): Set<String?>? {
         if (input is Collection<*>) {
             return input.map { it?.toString() }.toHashSet()
@@ -21,6 +22,7 @@ class StringSet: GraphQLScalarType("StringSet", "StringSet",
         return null
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun parseValue(input: Any?): List<String?>? {
         if (input is Collection<*>) {
             return input.map { it?.toString() }.toList()
@@ -31,6 +33,7 @@ class StringSet: GraphQLScalarType("StringSet", "StringSet",
         return null
     }
 
+    @Suppress("UNCHECKED_CAST")
     override fun parseLiteral(input: Any?): List<String?>? {
         if (input is ListType) {
             return input.children.map { if (it is StringValue) it.value else null

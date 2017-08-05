@@ -20,8 +20,6 @@ import java.net.URI
 import java.nio.file.Paths
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 
-
-
 @Configuration
 class DockerApiGraphqlConfiguration {
 
@@ -70,8 +68,7 @@ class DockerApiGraphqlConfiguration {
     }
 
     @Bean
-    fun graphQLServletRegistrationBean(schema: GraphQLSchema): ServletRegistrationBean {
-        return ServletRegistrationBean(SimpleGraphQLServlet(schema), "/graphql")
-    }
+    fun graphQLServletRegistrationBean(schema: GraphQLSchema) =
+            ServletRegistrationBean(SimpleGraphQLServlet(schema), "/graphql")
 
 }
