@@ -10,10 +10,11 @@ import org.springframework.boot.web.servlet.ServletRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import graphql.servlet.SimpleGraphQLServlet
-import org.rm3l.docker_api_graphql.resolver.*
+import org.rm3l.docker_api_graphql.resolvers.*
 import org.rm3l.docker_api_graphql.scalars.Date
 import org.rm3l.docker_api_graphql.scalars.StringSet
 import org.rm3l.docker_api_graphql.scalars.StringAnyMap
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import java.io.File
 import java.net.URI
@@ -22,6 +23,8 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 
 @Configuration
 class DockerApiGraphqlConfiguration {
+
+    private val logger = LoggerFactory.getLogger(DockerApiGraphqlConfiguration::class.java)
 
     @Value("\${DOCKER_HOST:unix:///var/run/docker.sock}")
     private lateinit var dockerHost: String
@@ -38,8 +41,16 @@ class DockerApiGraphqlConfiguration {
         val dockerCLientBuilder = DefaultDockerClient.builder().uri(URI.create(dockerHost))
                 .connectionPoolSize(connectionPoolSize)
         if (!dockerCertificatePath.isBlank()) {
-            dockerCLientBuilder.dockerCertificates(
-                    DockerCertificates(Paths.get(dockerCertificatePath)))
+            val file = File(dockerCertificatePath)
+            if (!file.exists()) {
+                throw IllegalArgumentException("DOCKER_CERT_PATH does not exist: '$dockerCertificatePath'")
+            }
+            if (file.isDirectory && file.listFiles().isNotEmpty()) {
+                dockerCLientBuilder.dockerCertificates(
+                        DockerCertificates(Paths.get(dockerCertificatePath)))
+            } else {
+                logger.warn("Ignored DOCKER_CERT_PATH as it is not a directory or is empty: '$dockerCertificatePath'")
+            }
         }
         return dockerCLientBuilder.build()
     }

@@ -1,4 +1,4 @@
-package org.rm3l.docker_api_graphql.resolver
+package org.rm3l.docker_api_graphql.resolvers
 
 import com.coxautodev.graphql.tools.GraphQLResolver
 import com.spotify.docker.client.DefaultDockerClient
