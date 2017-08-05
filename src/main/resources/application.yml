@@ -1,8 +1,3 @@
-graphql:
-  servlet:
-     mapping: /graphql
-     enabled: true
-     corsEnabled: true
-graphiql:
-  mapping: /graphiql
-  enabled: true
+spring:
+    main:
+        banner-mode: "off"
