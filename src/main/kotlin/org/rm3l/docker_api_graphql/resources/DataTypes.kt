@@ -1,27 +1,25 @@
 package org.rm3l.docker_api_graphql.resources
 
-import com.spotify.docker.client.DefaultDockerClient
-import com.spotify.docker.client.DockerClient
 import com.spotify.docker.client.messages.*
 
 data class HostInfo(val Info: Info?, val Version: Version?)
 
 data class ContainerFilter(
-        val ancestor: String?,
-        val before: String?,
-        val expose: String?,
-        val exited: Int?,
-        val health: ContainerHealth?,
-        val id: String?,
-        val isolation: ContainerIsolation?,
-        val is_task: Boolean?,
-        val label: String?,
-        val name: String?,
-        val network: String?,
-        val publish: String?,
-        val since: String?,
+        val ancestor: List<String>?,
+        val before: List<String>?,
+        val expose: List<String>?,
+        val exited: List<Int>?,
+        val health: List<ContainerHealth>?,
+        val id: List<String>?,
+        val isolation: List<ContainerIsolation>?,
+        val is_task: List<Boolean>?,
+        val label: List<String>?,
+        val name: List<String>?,
+        val network: List<String>?,
+        val publish: List<String>?,
+        val since: List<String>?,
         val status: List<ContainerStatus>?,
-        val volume: String?
+        val volume: List<String>?
 )
 
 enum class ContainerHealth {
@@ -48,16 +46,36 @@ enum class ContainerStatus {
 }
 
 data class ImageFilter(
-        val before: String?,
-        val dangling: Boolean?,
-        val label: String?,
-        val reference: String?,
-        val since: String?
+        val before: List<String>?,
+        val dangling: List<Boolean>?,
+        val label: List<String>?,
+        val reference: List<String>?,
+        val since: List<String>?
 )
 
 data class VolumeFilter(
-        val dangling: Boolean?,
-        val driver: String?,
-        val label: String?,
-        val name: String?
+        val dangling: List<Boolean>?,
+        val driver: List<String>?,
+        val label: List<String>?,
+        val name: List<String>?
 )
+
+data class NetworkFilter (
+    val driver: List<String>?,
+    val id: List<String>?,
+    val label: List<String>?,
+    val name: List<String>?,
+    val scope: List<NetworkScope>?,
+    val type: List<NetworkType>?
+)
+
+enum class NetworkScope {
+    swarm,
+    global,
+    local
+}
+
+enum class NetworkType {
+    custom,
+    builtin
+}

@@ -8,10 +8,11 @@ schema {
 
 type Query {
     host: HostInfo
-    containers(all: Boolean, limit: Int, size: Boolean, filter: [ContainerFilter]): [Container]
-    images(all: Boolean, digests: Boolean, filters: [ImageFilter]): [Image]
+    containers(all: Boolean, limit: Int, size: Boolean, filter: ContainerFilter): [Container]
+    images(all: Boolean, digests: Boolean, filters: ImageFilter): [Image]
     searchImagesOnDockerHub(term: String!): [ImageSearchResult]
-    volumes(filters: [VolumeFilter]): VolumeList
+    volumes(filters: VolumeFilter): VolumeList
+    networks(filters: NetworkFilter): [Network]
 }
 
 type HostInfo {
@@ -459,21 +460,21 @@ type Healthcheck {
 }
 
 input ContainerFilter {
-    ancestor: String
-    before: String
-    expose: String
-    exited: Int
-    health: ContainerHealth
-    id: String
-    isolation: ContainerIsolation
-    is_task: Boolean
-    label: String
-    name: String
-    network: String
-    publish: String
-    since: String
+    ancestor: [String]
+    before: [String]
+    expose: [String]
+    exited: [Int]
+    health: [ContainerHealth]
+    id: [String]
+    isolation: [ContainerIsolation]
+    is_task: [Boolean]
+    label: [String]
+    name: [String]
+    network: [String]
+    publish: [String]
+    since: [String]
     status: [ContainerStatus]
-    volume: String
+    volume: [String]
 }
 
 enum ContainerHealth {
@@ -520,11 +521,11 @@ type Image {
 }
 
 input ImageFilter {
-    before: String
-    dangling: Boolean
-    label: String
-    reference: String
-    since: String
+    before: [String]
+    dangling: [Boolean]
+    label: [String]
+    reference: [String]
+    since: [String]
 }
 
 type ImageDetails {
@@ -582,8 +583,53 @@ type Volume {
 }
 
 input VolumeFilter {
-    dangling: Boolean
-    driver: String
-    label: String
+    dangling: [Boolean]
+    driver: [String]
+    label: [String]
+    name: [String]
+}
+
+type Network {
     name: String
+    id: ID!
+    scope: String
+    driver: String
+    ipam: Ipam
+    containers: StringAnyMap
+    options: StringAnyMap
+    internal: Boolean
+    enableIPv6: Boolean
+    labels: StringAnyMap
+    attachable: Boolean
+}
+
+type Ipam {
+    driver: String
+    config: [IpamConfig]
+}
+
+type IpamConfig {
+    subnet: String
+    ipRange: String
+    gateway: String
+}
+
+input NetworkFilter {
+    driver: [String]
+    id: [String]
+    label: [String]
+    name: [String]
+    scope: [NetworkScope]
+    type: [NetworkType]
+}
+
+enum NetworkScope {
+    swarm
+    global
+    local
+}
+
+enum NetworkType {
+    custom
+    builtin
 }
