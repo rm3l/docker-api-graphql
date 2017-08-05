@@ -3,9 +3,10 @@ package org.rm3l.docker_api_graphql.resolvers
 import com.coxautodev.graphql.tools.GraphQLResolver
 import com.spotify.docker.client.DefaultDockerClient
 import com.spotify.docker.client.DockerClient
-import com.spotify.docker.client.messages.*
+import com.spotify.docker.client.messages.Container
+import com.spotify.docker.client.messages.TopResults
 
-class ContainerResolver(val dockerClient: DefaultDockerClient):
+class ContainerResolver(val dockerClient: DefaultDockerClient) :
         GraphQLResolver<Container> {
 
     fun details(container: Container) = dockerClient.inspectContainer(container.id())
@@ -20,16 +21,16 @@ class ContainerResolver(val dockerClient: DefaultDockerClient):
     fun stats(container: Container) = dockerClient.stats(container.id())
 
     fun logs(container: Container,
-                follow: Boolean?,
-                stdout: Boolean?,
-                stderr: Boolean?,
-                since: Int?,
-                timestamps: Boolean?,
-                lines: Int?,
-                customParams: Map<String, String>?): String? {
+             follow: Boolean?,
+             stdout: Boolean?,
+             stderr: Boolean?,
+             since: Int?,
+             timestamps: Boolean?,
+             lines: Int?,
+             customParams: Map<String, String>?): String? {
 
         val logsParam = mutableListOf<DockerClient.LogsParam>()
-        if (follow?:false) {
+        if (follow ?: false) {
             logsParam.add(DockerClient.LogsParam.follow(follow!!))
         }
         if (stdout == null && stderr == null) {
@@ -44,11 +45,11 @@ class ContainerResolver(val dockerClient: DefaultDockerClient):
             }
         }
         since?.let { logsParam.add(DockerClient.LogsParam.since(it)) }
-        if (timestamps?:false) {
+        if (timestamps ?: false) {
             logsParam.add(DockerClient.LogsParam.timestamps(timestamps!!))
         }
         lines?.let { logsParam.add(DockerClient.LogsParam.tail(it)) }
-        customParams?.forEach { key, value -> logsParam.add(DockerClient.LogsParam.create(key, value))}
+        customParams?.forEach { key, value -> logsParam.add(DockerClient.LogsParam.create(key, value)) }
 
         return dockerClient.logs(container.id(), *logsParam.toTypedArray())?.readFully()
     }

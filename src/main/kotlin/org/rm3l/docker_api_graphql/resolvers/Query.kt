@@ -3,17 +3,11 @@ package org.rm3l.docker_api_graphql.resolvers
 import com.coxautodev.graphql.tools.GraphQLRootResolver
 import com.spotify.docker.client.DefaultDockerClient
 import com.spotify.docker.client.DockerClient
-import com.spotify.docker.client.DockerClient.ListContainersParam.allContainers
-import com.spotify.docker.client.DockerClient.ListContainersParam.containersCreatedBefore
-import com.spotify.docker.client.DockerClient.ListContainersParam.containersCreatedSince
-import com.spotify.docker.client.DockerClient.ListContainersParam.filter
-import com.spotify.docker.client.DockerClient.ListContainersParam.limitContainers
-import com.spotify.docker.client.DockerClient.ListContainersParam.withContainerSizes
-import com.spotify.docker.client.DockerClient.ListContainersParam.withExitStatus
+import com.spotify.docker.client.DockerClient.ListContainersParam.*
 import com.spotify.docker.client.messages.*
 import org.rm3l.docker_api_graphql.resources.*
 
-class Query(val dockerClient: DefaultDockerClient): GraphQLRootResolver {
+class Query(val dockerClient: DefaultDockerClient) : GraphQLRootResolver {
 
     fun system() = System(dockerClient.info(), dockerClient.version())
 
@@ -46,7 +40,7 @@ class Query(val dockerClient: DefaultDockerClient): GraphQLRootResolver {
 
     fun images(all: Boolean?, digests: Boolean?, filters: ImageFilter?): List<Image> {
         val listOfParams = mutableListOf(DockerClient.ListImagesParam.allImages(all ?: false))
-        if (digests?:false) {
+        if (digests ?: false) {
             listOfParams.add(DockerClient.ListImagesParam.digests())
         }
         filters?.let {
@@ -81,12 +75,14 @@ class Query(val dockerClient: DefaultDockerClient): GraphQLRootResolver {
             it.name?.forEach { listOfParams.add(DockerClient.ListNetworksParam.filter("name", it)) }
             it.label?.forEach { listOfParams.add(DockerClient.ListNetworksParam.filter("label", it)) }
             it.scope?.forEach { listOfParams.add(DockerClient.ListNetworksParam.filter("scope", it.name)) }
-            it.type?.forEach { listOfParams.add(DockerClient.ListNetworksParam.withType(
-                    when (it) {
-                        NetworkType.builtin -> Network.Type.BUILTIN
-                        NetworkType.custom -> Network.Type.CUSTOM
-                    }
-            )) }
+            it.type?.forEach {
+                listOfParams.add(DockerClient.ListNetworksParam.withType(
+                        when (it) {
+                            NetworkType.builtin -> Network.Type.BUILTIN
+                            NetworkType.custom -> Network.Type.CUSTOM
+                        }
+                ))
+            }
         }
         return dockerClient.listNetworks(*listOfParams.toTypedArray())
     }

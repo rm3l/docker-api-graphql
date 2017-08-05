@@ -1,6 +1,7 @@
 package org.rm3l.docker_api_graphql.resources
 
-import com.spotify.docker.client.messages.*
+import com.spotify.docker.client.messages.Info
+import com.spotify.docker.client.messages.Version
 
 data class System(val Info: Info?, val Version: Version?)
 
@@ -60,13 +61,13 @@ data class VolumeFilter(
         val name: List<String>?
 )
 
-data class NetworkFilter (
-    val driver: List<String>?,
-    val id: List<String>?,
-    val label: List<String>?,
-    val name: List<String>?,
-    val scope: List<NetworkScope>?,
-    val type: List<NetworkType>?
+data class NetworkFilter(
+        val driver: List<String>?,
+        val id: List<String>?,
+        val label: List<String>?,
+        val name: List<String>?,
+        val scope: List<NetworkScope>?,
+        val type: List<NetworkType>?
 )
 
 enum class NetworkScope {
@@ -80,12 +81,12 @@ enum class NetworkType {
     builtin
 }
 
-data class NodeFilter (
-    val id: List<String>?,
-    val label: List<String>?,
-    val membership: List<NodeMembership>?,
-    val name: List<String>?,
-    val role: List<NodeRole>?
+data class NodeFilter(
+        val id: List<String>?,
+        val label: List<String>?,
+        val membership: List<NodeMembership>?,
+        val name: List<String>?,
+        val role: List<NodeRole>?
 )
 
 enum class NodeMembership {

@@ -2,9 +2,9 @@ package org.rm3l.docker_api_graphql.resolvers
 
 import com.coxautodev.graphql.tools.GraphQLResolver
 import com.spotify.docker.client.DefaultDockerClient
-import com.spotify.docker.client.messages.*
+import com.spotify.docker.client.messages.Image
 
-class ImageResolver(val dockerClient: DefaultDockerClient):
+class ImageResolver(val dockerClient: DefaultDockerClient) :
         GraphQLResolver<Image> {
 
     fun details(image: Image) = dockerClient.inspectImage(image.id())

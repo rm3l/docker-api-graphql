@@ -6,7 +6,7 @@ import com.spotify.docker.client.messages.swarm.Node
 import com.spotify.docker.client.messages.swarm.Swarm
 import org.rm3l.docker_api_graphql.resources.NodeFilter
 
-class SwarmResolver(val dockerClient: DefaultDockerClient):
+class SwarmResolver(val dockerClient: DefaultDockerClient) :
         GraphQLResolver<Swarm> {
 
     fun unlockKey(swarm: Swarm) = dockerClient.unlockKey()

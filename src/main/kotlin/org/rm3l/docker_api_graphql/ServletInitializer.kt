@@ -5,6 +5,6 @@ import org.springframework.boot.web.support.SpringBootServletInitializer
 
 class ServletInitializer : SpringBootServletInitializer() {
 
-	override fun configure(application: SpringApplicationBuilder) =
-			application.sources(DockerApiGraphqlApplication::class.java)
+    override fun configure(application: SpringApplicationBuilder) =
+            application.sources(DockerApiGraphqlApplication::class.java)
 }
