@@ -1,0 +1,13 @@
+.git
+.gitignore
+
+.idea
+**/*.iml
+
+.gradle
+build
+out
+
+Dockerfile
+.dockerignore
+
