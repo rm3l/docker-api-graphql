@@ -79,3 +79,21 @@ enum class NetworkType {
     custom,
     builtin
 }
+
+data class NodeFilter (
+    val id: List<String>?,
+    val label: List<String>?,
+    val membership: List<NodeMembership>?,
+    val name: List<String>?,
+    val role: List<NodeRole>?
+)
+
+enum class NodeMembership {
+    accepted,
+    pending
+}
+
+enum class NodeRole {
+    manager,
+    worker
+}

@@ -8,8 +8,7 @@ import com.spotify.docker.client.messages.*
 class ContainerResolver(val dockerClient: DefaultDockerClient):
         GraphQLResolver<Container> {
 
-    fun details(container: Container): ContainerInfo =
-            dockerClient.inspectContainer(container.id())
+    fun details(container: Container) = dockerClient.inspectContainer(container.id())
 
     fun processes(container: Container, ps_args: String?): TopResults? {
         if (ps_args.isNullOrBlank()) {
@@ -18,8 +17,7 @@ class ContainerResolver(val dockerClient: DefaultDockerClient):
         return dockerClient.topContainer(container.id(), ps_args)
     }
 
-    fun stats(container: Container): ContainerStats =
-            dockerClient.stats(container.id())
+    fun stats(container: Container) = dockerClient.stats(container.id())
 
     fun logs(container: Container,
                 follow: Boolean?,
@@ -55,7 +53,6 @@ class ContainerResolver(val dockerClient: DefaultDockerClient):
         return dockerClient.logs(container.id(), *logsParam.toTypedArray())?.readFully()
     }
 
-    fun changes(container: Container): List<ContainerChange> =
-            dockerClient.inspectContainerChanges(container.id())
+    fun changes(container: Container) = dockerClient.inspectContainerChanges(container.id())
 
 }

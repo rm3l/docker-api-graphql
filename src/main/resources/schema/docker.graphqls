@@ -8,19 +8,20 @@ schema {
 
 type Query {
     host: HostInfo
+    swarm: Swarm
     containers(all: Boolean, limit: Int, size: Boolean, filter: ContainerFilter): [Container]
-    images(all: Boolean, digests: Boolean, filters: ImageFilter): [Image]
+    images(all: Boolean, digests: Boolean, filter: ImageFilter): [Image]
     searchImagesOnDockerHub(term: String!): [ImageSearchResult]
-    volumes(filters: VolumeFilter): VolumeList
-    networks(filters: NetworkFilter): [Network]
+    volumes(filter: VolumeFilter): VolumeList
+    networks(filter: NetworkFilter): [Network]
 }
 
 type HostInfo {
-    version: Version!
+    version: HostVersion!
     info: Info!
 }
 
-type Version {
+type HostVersion {
     apiVersion: String!
     arch: String!
     buildTime: String!
@@ -103,13 +104,13 @@ type SwarmInfo {
 
 type SwarmCluster {
     id: ID!
-    version: SwarmClusterVersion
+    version: SwarmVersion
     createdAt: Date
     updatedAt: Date
 #    swarmSpec: SwarmSpec
 }
 
-type SwarmClusterVersion {
+type SwarmVersion {
     index: Long
 }
 
@@ -632,4 +633,163 @@ enum NetworkScope {
 enum NetworkType {
     custom
     builtin
+}
+
+type Swarm {
+    id: ID!
+    version: SwarmVersion
+    createdAt: Date
+    swarmSpec: SwarmSpec
+    joinTokens: JoinTokens
+
+    unlockKey: UnlockKey
+    nodes(filter: NodeFilter): [SwarmNode]
+}
+
+type SwarmSpec {
+    name: String
+    labels: StringAnyMap
+    orchestration: OrchestrationConfig
+    raft: RaftConfig
+    dispatcher: DispatcherConfig
+    caConfig: CaConfig
+    encryptionConfig: EncryptionConfig
+    taskDefaults: TaskDefaults
+}
+
+type OrchestrationConfig {
+    taskHistoryRetentionLimit: Int
+}
+
+type RaftConfig {
+    snapshotInterval: Int
+    keepOldSnapshots: Int
+    logEntriesForSlowFollowers: Int
+    electionTick: Int
+    heartbeatTick: Int
+}
+
+type DispatcherConfig {
+    heartbeatPeriod: Long
+}
+
+type CaConfig {
+    nodeCertExpiry: Long
+    externalCas: [ExternalCa]
+}
+
+type ExternalCa {
+    protocol: String
+    url: String
+    options: StringAnyMap
+}
+
+type EncryptionConfig {
+    autoLockManagers: Boolean
+}
+
+type TaskDefaults {
+    logDriver: Driver
+}
+
+type Driver {
+    name: String
+    options: StringAnyMap
+}
+
+type JoinTokens {
+    worker: String
+    manager: String
+}
+
+type UnlockKey {
+    unlockKey: String
+}
+
+type SwarmNode {
+    id: String
+    version: SwarmVersion
+    createdAt: Date
+    updatedAt: Date
+    spec: NodeSpec
+    description: NodeDescription
+    status: NodeStatus
+    managerStatus: ManagerStatus
+
+    details: NodeInfo
+}
+
+type NodeSpec {
+    name: String
+    labels: StringAnyMap
+    role: String
+    availability: String
+}
+
+type NodeDescription {
+    hostname: String
+    platform: Platform
+    resources: Resources
+    engine: EngineConfig
+}
+
+type Platform {
+    architecture: String
+    os: String
+}
+
+type Resources {
+    nanoCpus: Long
+    memoryBytes: Long
+}
+
+type EngineConfig {
+    engineVersion: String
+    labels: StringAnyMap
+    plugins: [EnginePlugin]
+}
+
+type EnginePlugin {
+    type: String
+    name: String
+}
+
+type NodeStatus {
+    state: String
+    addr: String
+}
+
+type ManagerStatus {
+    leader: Boolean
+    reachability: String
+    addr: String
+}
+
+input NodeFilter {
+    id: String
+    label: String
+    membership: NodeMembership
+    name: String
+    role: NodeRole
+}
+
+enum NodeMembership {
+    accepted
+    pending
+}
+
+enum NodeRole {
+    manager
+    worker
+}
+
+type NodeInfo {
+    id: ID!
+    version: SwarmVersion
+    createdAt: Date
+    updatedAt: Date
+    spec: NodeSpec
+    description: NodeDescription
+    status: NodeStatus
+    managerStatus: ManagerStatus
 }

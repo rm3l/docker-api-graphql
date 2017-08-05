@@ -15,8 +15,9 @@ import org.rm3l.docker_api_graphql.resources.*
 
 class Query(val dockerClient: DefaultDockerClient): GraphQLRootResolver {
 
-    fun host(): HostInfo =
-            HostInfo(dockerClient.info(), dockerClient.version())
+    fun host() = HostInfo(dockerClient.info(), dockerClient.version())
+
+    fun swarm() = dockerClient.inspectSwarm()
 
     fun containers(all: Boolean?, limit: Int?, size: Boolean?, filter: ContainerFilter?):
             List<Container> {

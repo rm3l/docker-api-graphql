@@ -5,15 +5,12 @@ import com.spotify.docker.client.DefaultDockerClient
 import com.spotify.docker.client.DockerCertificates
 import com.spotify.docker.client.messages.ContainerInfo
 import com.spotify.docker.client.messages.ImageInfo
-import com.spotify.docker.client.messages.swarm.Version
 import graphql.schema.GraphQLSchema
 import org.springframework.boot.web.servlet.ServletRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import graphql.servlet.SimpleGraphQLServlet
-import org.rm3l.docker_api_graphql.resolver.ContainerResolver
-import org.rm3l.docker_api_graphql.resolver.ImageResolver
-import org.rm3l.docker_api_graphql.resolver.Query
+import org.rm3l.docker_api_graphql.resolver.*
 import org.rm3l.docker_api_graphql.scalars.Date
 import org.rm3l.docker_api_graphql.scalars.StringSet
 import org.rm3l.docker_api_graphql.scalars.StringAnyMap
@@ -50,13 +47,17 @@ class DockerApiGraphqlConfiguration {
     fun graphQLSchema(dockerClient: DefaultDockerClient): GraphQLSchema {
         return SchemaParser.newParser()
                 .file("schema${File.separator}docker.graphqls")
-                .dictionary("SwarmClusterVersion", Version::class.java)
+                .dictionary("HostVersion", com.spotify.docker.client.messages.Version::class.java)
                 .dictionary("ContainerDetails", ContainerInfo::class.java)
                 .dictionary("ImageDetails", ImageInfo::class.java)
+                .dictionary("SwarmVersion", com.spotify.docker.client.messages.swarm.Version::class.java)
+                .dictionary("SwarmNode", com.spotify.docker.client.messages.swarm.Node::class.java)
                 .scalars(Date(), StringAnyMap(), StringSet())
                 .resolvers(Query(dockerClient),
                         ContainerResolver(dockerClient),
-                        ImageResolver(dockerClient))
+                        ImageResolver(dockerClient),
+                        SwarmResolver(dockerClient),
+                        NodeResolver(dockerClient))
                 .build()
                 .makeExecutableSchema()
     }

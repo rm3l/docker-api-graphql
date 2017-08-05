@@ -8,9 +8,7 @@ import com.spotify.docker.client.messages.*
 class ImageResolver(val dockerClient: DefaultDockerClient):
         GraphQLResolver<Image> {
 
-    fun details(image: Image): ImageInfo =
-            dockerClient.inspectImage(image.id())
+    fun details(image: Image) = dockerClient.inspectImage(image.id())
 
-    fun history(image: Image): List<ImageHistory> =
-            dockerClient.history(image.id())
+    fun history(image: Image) = dockerClient.history(image.id())
 }
