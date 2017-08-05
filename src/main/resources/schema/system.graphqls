@@ -1,0 +1,73 @@
+type System {
+    version: SystemVersion!
+    info: SystemInfo!
+}
+
+type SystemVersion {
+    apiVersion: String!
+    arch: String!
+    buildTime: String!
+    gitCommit: String!
+    goVersion: String!
+    kernelVersion: String!
+    os: String!
+    version: String!
+    #    experimental: Boolean!
+}
+
+type SystemInfo {
+    architecture: String
+    clusterStore: String
+    cgroupDriver: String
+    containers: Int
+    containersRunning: Int
+    containersStopped: Int
+    containersPaused: Int
+    cpuCfsPeriod: Boolean
+    cpuCfsQuota: Boolean
+    debug: Boolean
+    dockerRootDir: String
+    storageDriver: String
+    #    driverStatus: [[String]]
+    executionDriver: String
+    experimentalBuild: Boolean
+    httpProxy: String
+    httpsProxy: String
+    id: ID!
+    ipv4Forwarding: Boolean
+    images: Int
+    indexServerAddress: String
+    initPath: String
+    initSha1: String
+    kernelMemory: Boolean
+    kernelVersion: String
+    labels: [String]
+    memTotal: Long
+    memoryLimit: Boolean
+    cpus: Int
+    eventsListener: Int
+    fileDescriptors: Int
+    goroutines: Int
+    name: String
+    noProxy: String
+    oomKillDisable: Boolean
+    operatingSystem: String
+    osType: String
+    plugins: Plugins
+    registryConfig: RegistryConfig
+    serverVersion: String
+    swapLimit: Boolean
+    swarm: SwarmInfo
+    #    systemStatus: [[String]]
+    systemTime: Date
+}
+
+type Plugins {
+    volumes: [String]
+    networks: [String]
+}
+
+type RegistryConfig {
+    insecureRegistryCidrs: [String]
+    indexConfigs: StringAnyMap
+}

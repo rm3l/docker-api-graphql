@@ -1,0 +1,61 @@
+
+type Image {
+    created: String
+    id: ID!
+    parentId: String
+    repoTags: [String]
+    repoDigests: [String]
+    size: Long
+    virtualSize: Long
+    labels: StringAnyMap
+
+    details: ImageDetails
+    history: [ImageHistory]
+}
+
+input ImageFilter {
+    before: [String]
+    dangling: [Boolean]
+    label: [String]
+    reference: [String]
+    since: [String]
+}
+
+type ImageDetails {
+    id: ID!
+    parent: String
+    comment: String
+    created: Date
+    container: String
+    containerConfig: ContainerConfig
+    dockerVersion: String
+    author: String
+    config: ContainerConfig
+    architecture: String
+    os: String
+    size: Long
+    virtualSize: String
+    rootFs: RootFs
+}
+
+type RootFs {
+    type: String
+    layers: [String]
+}
+
+type ImageHistory {
+    id: ID!
+    created: Long
+    createdBy: String
+    tags: [String]
+    size: Long
+    comment: String
+}
+
+type ImageSearchResult {
+    description: String
+    official: Boolean
+    automated: Boolean
+    name: String
+    starCount: Int
+}

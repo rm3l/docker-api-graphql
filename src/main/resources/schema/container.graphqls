@@ -1,0 +1,387 @@
+type Container {
+    id: ID!
+    names: [String]
+    image: String
+    imageId: String
+    command: String
+    created: Long
+    state: String
+    status: String
+    ports: [PortMapping]
+    labels: StringAnyMap
+    sizeRw: Long
+    sizeRootFs: Long
+    networkSettings: NetworkSettings
+    mounts: [ContainerMount]
+
+    details: ContainerDetails
+    processes(ps_args: String): TopResults
+    stats: ContainerStats
+    logs(follow: Boolean, stdout: Boolean, stderr: Boolean, since: Int, timestamps: Boolean, lines: Int, customParams: StringAnyMap): String
+    changes: [ContainerChange]
+
+    portsAsString: String
+}
+
+type ContainerChange {
+    path: String
+    kind: Int
+}
+
+type ContainerDetails {
+    id: ID!
+    created: Date
+    path: String
+    args: [String]
+    config: ContainerConfig
+    hostConfig: HostConfig
+    state: ContainerState
+    image: String
+    networkSettings: NetworkSettings
+    resolvConfPath: String
+    hostnamePath: String
+    hostsPath: String
+    name: String
+    driver: String
+    execDriver: String
+    processLabel: String
+    mountLabel: String
+    volumes: StringAnyMap
+    volumesRw: StringAnyMap
+    appArmorProfile: String
+    execIds: [String]
+    logPath: String
+    restartCount: Long
+    mounts: [ContainerMount]
+    node: Node
+}
+
+type Node {
+    id: ID!
+    ip: String
+    addr: String
+    name: String
+}
+
+type ContainerMount {
+    type: String
+    name: String
+    source: String
+    destination: String
+    driver: String
+    mode: String
+    rw: Boolean
+    propagation: String
+}
+
+type NetworkSettings {
+    ipAddress: String
+    ipPrefixLen: Int
+    gateway: String
+    bridge: String
+    portMapping: StringAnyMap
+    ports: StringAnyMap
+    macAddress: String
+    networks: StringAnyMap
+    endpointId: String
+    sandboxId: String
+    sandboxKey: String
+    hairpinMode: Boolean
+    linkLocalIPv6Address: String
+    linkLocalIPv6PrefixLen: Int
+    globalIPv6Address: String
+    globalIPv6PrefixLen: Int
+    ipv6Gateway: String
+}
+
+type ContainerState {
+    status: String
+    running: Boolean
+    paused: Boolean
+    restarting: Boolean
+    pid: Int
+    exitCode: Int
+    startedAt: Date
+    finishedAt: Date
+    error: String
+    oomKilled: Boolean
+    health: Health
+}
+
+type Health {
+    status: String
+    failingStreak: Int
+    log: [HealthLog]
+}
+
+type HealthLog {
+    start: Date
+    end: Date
+    exitCode: Int
+    output: String
+}
+
+type HostConfig {
+    binds: [String]
+    blkioWeight: Int
+    blkioWeightDevice: [BlkioWeightDevice]
+    blkioDeviceReadBps: [BlkioDeviceRate]
+    blkioDeviceWriteBps: [BlkioDeviceRate]
+    blkioDeviceReadIOps: [BlkioDeviceRate]
+    blkioDeviceWriteIOps: [BlkioDeviceRate]
+    containerIdFile: String
+    lxcConf: [LxcConfParameter]
+    privileged: Boolean
+    portBindings: StringAnyMap
+    links: [String]
+    publishAllPorts: Boolean
+    dns: [String]
+    dnsOptions: [String]
+    dnsSearch: [String]
+    extraHosts: [String]
+    volumesFrom: [String]
+    capAdd: [String]
+    capDrop: [String]
+    networkMode: String
+    securityOpt: [String]
+    devices: [Device]
+    memory: Long
+    memorySwap: Long
+    memorySwappiness: Int
+    memoryReservation: Long
+    nanoCpus: Long
+    cpuPeriod: Long
+    cpuShares: Long
+    cpusetCpus: String
+    cpusetMems: String
+    cpuQuota: Long
+    cgroupParent: String
+    restartPolicy: RestartPolicy
+    logConfig: LogConfig
+    ipcMode: String
+    ulimits: [Ulimit]
+    pidMode: String
+    shmSize: Long
+    oomKillDisable: Boolean
+    oomScoreAdj: Int
+    autoRemove: Boolean
+    pidsLimit: Int
+    tmpfs: StringAnyMap
+    readonlyRootfs: Boolean
+    storageOpt: StringAnyMap
+}
+
+type Ulimit {
+    name: String
+    soft: Long
+    hard: Long
+}
+
+type LogConfig {
+    logType: String
+    logOptions: StringAnyMap
+}
+
+type RestartPolicy {
+    name: String
+    maxRetryCount: Int
+}
+
+type Device {
+    pathOnHost: String
+    pathInContainer: String
+    cgroupPermissions: String
+}
+
+type LxcConfParameter {
+    key: String
+    value: String
+}
+
+type BlkioDeviceRate {
+    path: String
+    rate: Int
+}
+
+type BlkioWeightDevice {
+    path: String
+    weight: Int
+}
+
+type ContainerConfig {
+    hostname: String
+    domainname: String
+    user: String
+    attachStdin: Boolean
+    attachStdout: Boolean
+    attachStderr: Boolean
+    portSpecs: [String]
+    exposedPorts: StringSet
+    tty: Boolean
+    openStdin: Boolean
+    stdinOnce: Boolean
+    env: [String]
+    cmd: [String]
+    image: String
+    volumeNames: StringSet
+    volumes: StringAnyMap
+    workingDir: String
+    entrypoint: [String]
+    networkDisabled: Boolean
+    onBuild: [String]
+    labels: StringAnyMap
+    macAddress: String
+    hostConfig: HostConfig
+    stopSignal: String
+    healthcheck: Healthcheck
+    networkingConfig: NetworkingConfig
+}
+
+type NetworkingConfig {
+    endpointsConfig: StringAnyMap
+}
+
+type Healthcheck {
+    test: [String]
+    interval: Long
+    timeout: Long
+    retries: Int
+    startPeriod: Long
+}
+
+input ContainerFilter {
+    ancestor: [String]
+    before: [String]
+    expose: [String]
+    exited: [Int]
+    health: [ContainerHealth]
+    id: [String]
+    isolation: [ContainerIsolation]
+    is_task: [Boolean]
+    label: [String]
+    name: [String]
+    network: [String]
+    publish: [String]
+    since: [String]
+    status: [ContainerStatus]
+    volume: [String]
+}
+
+enum ContainerHealth {
+    starting
+    healthy
+    unhealthy
+    none
+}
+
+enum ContainerIsolation {
+    default
+    process
+    hyperv
+}
+
+enum ContainerStatus {
+    created
+    restarting
+    running
+    removing
+    paused
+    exited
+    dead
+}
+
+type PortMapping {
+    privatePort: Int
+    publicPort: Int
+    type: String
+    ip: String
+}
+
+type TopResults {
+    titles: [String]
+    #    processes: ImmutableList<ImmutableList<String>>
+}
+
+type ContainerStats {
+    read: Date
+    network: NetworkStats
+    networks: StringAnyMap
+    memoryStats: MemoryStats
+    #    blockIoStats: BlockIoStats
+    cpuStats: CpuStats
+    precpuStats: CpuStats
+}
+
+type CpuStats {
+    cpuUsage: CpuUsage
+    systemCpuUsage: Long
+    throttlingData: ThrottlingData
+}
+
+type ThrottlingData {
+    periods: Long
+    throttledPeriods: Long
+    throttledTime: Long
+}
+
+type CpuUsage {
+    totalUsage: Long
+    percpuUsage: [Long]
+    usageInKernelmode: Long
+    usageInUsermode: Long
+}
+
+type NetworkStats {
+    rxBytes: Long
+    rxPackets: Long
+    rxDropped: Long
+    rxErrors: Long
+    txBytes: Long
+    txPackets: Long
+    txDropped: Long
+    txErrors: Long
+}
+
+#type BlockIoStats {
+#
+#}
+
+type MemoryStats {
+    stats: Stats
+    maxUsage: Long
+    usage: Long
+    failcnt: Long
+    limit: Long
+}
+
+type Stats {
+    activeFile: Long
+    totalActiveFile: Long
+    inactiveFile: Long
+    totalInactiveFile: Long
+    cache: Long
+    totalCache: Long
+    activeAnon: Long
+    totalActiveAnon: Long
+    inactiveAnon: Long
+    totalInactiveAnon: Long
+    hierarchicalMemoryLimit: BigInteger
+    mappedFile: Long
+    totalMappedFile: Long
+    pgmajfault: Long
+    totalPgmajfault: Long
+    pgpgin: Long
+    totalPgpgin: Long
+    pgpgout: Long
+    totalPgpgout: Long
+    pgfault: Long
+    totalPgfault: Long
+    rss: Long
+    totalRss: Long
+    rssHuge: Long
+    totalRssHuge: Long
+    unevictable: Long
+    totalUnevictable: Long
+    totalWriteback: Long
+    writeback: Long
+}

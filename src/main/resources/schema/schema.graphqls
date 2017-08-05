@@ -1,0 +1,31 @@
+#Schema
+schema {
+    # Query
+    query: Query
+}
+
+#Root Query
+type Query {
+    # System-wide information
+    system: System
+    # Engines can be clustered together in a swarm. This returns more details about the Swarm. Requires Docker API >= 1.24
+    swarm: Swarm
+    # List containers with various filters
+    containers(
+        # all containers, whatever their state
+        all: Boolean,
+        # limit of the list returned
+        limit: Int,
+        size: Boolean,
+        filter: ContainerFilter): [Container]
+    images(
+        all: Boolean,
+        digests: Boolean,
+        filter: ImageFilter): [Image]
+    searchImagesOnDockerHub(
+        term: String!): [ImageSearchResult]
+    volumes(
+        filter: VolumeFilter): VolumeList
+    networks(
+        filter: NetworkFilter): [Network]
+}

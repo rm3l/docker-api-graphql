@@ -18,6 +18,9 @@ import org.springframework.beans.factory.annotation.Value
 import java.io.File
 import java.net.URI
 import java.nio.file.Paths
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver
+
+
 
 @Configuration
 class DockerApiGraphqlConfiguration {
@@ -45,8 +48,12 @@ class DockerApiGraphqlConfiguration {
 
     @Bean
     fun graphQLSchema(dockerClient: DefaultDockerClient): GraphQLSchema {
+        val allSchemas = PathMatchingResourcePatternResolver()
+                .getResources("/schema/**/*.graphqls")
+                .map { "schema${File.separator}${it.filename}" }
+                .toList()
         return SchemaParser.newParser()
-                .file("schema${File.separator}docker.graphqls")
+                .files(*allSchemas.toTypedArray())
                 .dictionary("SystemVersion", com.spotify.docker.client.messages.Version::class.java)
                 .dictionary("ContainerDetails", ContainerInfo::class.java)
                 .dictionary("ImageDetails", ImageInfo::class.java)

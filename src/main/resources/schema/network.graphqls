@@ -1,0 +1,45 @@
+
+type Network {
+    name: String
+    id: ID!
+    scope: String
+    driver: String
+    ipam: Ipam
+    containers: StringAnyMap
+    options: StringAnyMap
+    internal: Boolean
+    enableIPv6: Boolean
+    labels: StringAnyMap
+    attachable: Boolean
+}
+
+type Ipam {
+    driver: String
+    config: [IpamConfig]
+}
+
+type IpamConfig {
+    subnet: String
+    ipRange: String
+    gateway: String
+}
+
+input NetworkFilter {
+    driver: [String]
+    id: [String]
+    label: [String]
+    name: [String]
+    scope: [NetworkScope]
+    type: [NetworkType]
+}
+
+enum NetworkScope {
+    swarm
+    global
+    local
+}
+
+enum NetworkType {
+    custom
+    builtin
+}
