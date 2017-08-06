@@ -98,6 +98,7 @@ to be able to reproduce the issue.
 
 ## TODO
 
+* [ ] Map other endpoints of the Docker Remote API, e.g,: Services, Secrets, Tasks, ...
 * [ ] GraphQL Mutations
 * [ ] GraphQL Subscriptions if possible, especially for Docker events
 * [ ] Authentication / Authorization
@@ -115,7 +116,7 @@ to be able to reproduce the issue.
 
 * Armel Soro
   * [keybase.io/rm3l](https://keybase.io/rm3l)
-  * [rm3l.org](https://rm3l.org) - &lt;apps+docker-api-graphql@rm3l.org&gt; - [@rm3l](https://twitter.com/rm3l)
+  * [rm3l.org](https://rm3l.org) - &lt;apps+docker_api_graphql@rm3l.org&gt; - [@rm3l](https://twitter.com/rm3l)
   * [paypal.me/rm3l](https://paypal.me/rm3l)
   * [coinbase.com/rm3l](https://www.coinbase.com/rm3l)
 

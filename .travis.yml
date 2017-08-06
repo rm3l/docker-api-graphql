@@ -55,9 +55,10 @@ notifications:
 
 after_success:
      - if [ "$TRAVIS_BRANCH" == "master" ]; then
-       docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-       docker push rm3l/docker-api-graphql;
-       elif [[ $TRAVIS_TAG ]]; then
-       docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-       docker push rm3l/docker-api-graphql:$TRAVIS_TAG;
+        docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+        docker push rm3l/docker-api-graphql;
+       fi;
+       if [[ $TRAVIS_TAG ]]; then
+        docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+        docker push rm3l/docker-api-graphql:$TRAVIS_TAG;
        fi
