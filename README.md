@@ -10,7 +10,7 @@
 
 ---
 
-[![Demo Video](http://img.youtube.com/vi/iSmBXnNo6VQ/0.jpg)](https://youtu.be/iSmBXnNo6VQ "Demo Video for Docker API GraphQL")
+[![Demo Video](https://raw.githubusercontent.com/rm3l/docker-api-graphql/master/assets/docker-api-graphql-video-screenshot.png)](https://youtu.be/iSmBXnNo6VQ "Demo Video for Docker API GraphQL")
 
 <!--
 <p align="center"><img src="https://raw.githubusercontent.com/rm3l/docker-api-graphql/master/assets/docker-api-graphiql.png" width=768 alt="Docker API GraphQL"></p>
