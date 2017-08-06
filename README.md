@@ -1,6 +1,6 @@
 # Docker API GraphQL
 
-<p align="center"><img src="https://raw.githubusercontent.com/rm3l/docker-api-graphql/master/assets/docker-api-graphql.png" width=96 alt="Docker API GraphQL"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/rm3l/docker-api-graphql/master/assets/docker-api-graphql.png" width=111 alt="Docker API GraphQL"></p>
 
 > A GraphQL API Server around the Docker Remote API. SpringBoot-based app, written in Kotlin.
 
@@ -10,7 +10,7 @@
 
 ---
 
-<p align="center"><img src="https://raw.githubusercontent.com/rm3l/docker-api-graphql/master/assets/docker-api-graphiql.png" width=512 alt="Docker API GraphQL"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/rm3l/docker-api-graphql/master/assets/docker-api-graphiql.png" width=768 alt="Docker API GraphQL"></p>
 
 TODO Add documentation here
 
