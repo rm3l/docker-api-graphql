@@ -22,6 +22,7 @@ To use it against a local Docker daemon listening on a local Unix socket:
 ```bash
 docker run \
  --name docker-api-graphql \
+ -d \
  -p 8080:8080 \
  -v /var/run/docker.sock:/var/run/docker.sock \
  rm3l/docker-api-graphql
@@ -33,6 +34,7 @@ For more sophisticated use cases of Docker daemons accessible over the network (
 ```bash
 docker run \
  --name docker-api-graphql \
+ -d \
  -p 8080:8080 \
  -e DOCKER_HOST=https://<host>:<port> \
  -v /path/to/my/.docker/folder/containing/my/certificates:/opt/certs \
@@ -47,6 +49,7 @@ Deploying this API to manage a Swarm cluster is just as easy ! You can directly 
 ```bash
 docker service create \
  --name docker-api-graphql \
+ -d \
  --publish 8080:8080 \
  --constraint 'node.role == manager' \
  --mount type=bind,src=//var/run/docker.sock,dst=/var/run/docker.sock \
