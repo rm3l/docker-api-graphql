@@ -37,11 +37,11 @@ docker run \
  -d \
  -p 8080:8080 \
  -e DOCKER_HOST=https://<host>:<port> \
- -v /path/to/my/.docker/folder/containing/my/certificates:/opt/certs \
+ -v /path/to/my/docker/folder/containing/my/certificates:/etc/docker \
  rm3l/docker-api-graphql
 ```
 
-<b>Note</b>: the `/path/to/my/.docker/folder/containing/my/certificates` must be mounted under `/opt/certs` inside the running container, and must follow the semantics behind [the DOCKER_CERT_PATH environment variable](https://docs.docker.com/articles/https/#client-modes)  
+<b>Note</b>: the `/path/to/my/docker/folder/containing/my/certificates` must be mounted under `/etc/docker` inside the running container, and must follow the semantics behind [the DOCKER_CERT_PATH environment variable](https://docs.docker.com/articles/https/#client-modes)  
 
 You'll just need to access the port 8080 of the Docker engine where `docker-api-graphql` is running using your browser. 
 
