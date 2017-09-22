@@ -8,6 +8,11 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/rm3l/docker-api-graphql/blob/master/LICENSE)
 [![Coverage Status](https://coveralls.io/repos/github/rm3l/docker-api-graphql/badge.svg?branch=master)](https://coveralls.io/github/rm3l/docker-api-graphql?branch=master)  
 
+[![Docker Automated build](https://img.shields.io/docker/automated/rm3l/docker-api-graphql.svg)](https://hub.docker.com/r/rm3l/docker-api-graphql) 
+[![Docker Build Status](https://img.shields.io/docker/build/rm3l/docker-api-graphql.svg)](https://hub.docker.com/r/rm3l/docker-api-graphql) 
+[![Docker Stars](https://img.shields.io/docker/stars/rm3l/docker-api-graphql.svg)](https://hub.docker.com/r/rm3l/docker-api-graphql) 
+[![Docker Pulls](https://img.shields.io/docker/pulls/rm3l/docker-api-graphql.svg)](https://hub.docker.com/r/rm3l/docker-api-graphql)
+
 ---
 
 [![Demo Video](https://raw.githubusercontent.com/rm3l/docker-api-graphql/master/assets/docker-api-graphql-video-screenshot.png)](https://youtu.be/iSmBXnNo6VQ "Demo Video for Docker API GraphQL")
