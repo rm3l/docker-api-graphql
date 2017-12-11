@@ -15,6 +15,23 @@
 
 ---
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Running with Docker](#running-with-docker)
+- [API Endpoints](#api-endpoints)
+  - [/graphiql](#graphiql)
+  - [/graphql](#graphql)
+- [Building from source](#building-from-source)
+- [Contributing and Improving docker-api-graphql!](#contributing-and-improving-docker-api-graphql)
+- [TODO](#todo)
+- [Open-Source Libraries and Tools](#open-source-libraries-and-tools)
+- [Developed by](#developed-by)
+- [LICENSE](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 [![Demo Video](https://raw.githubusercontent.com/rm3l/docker-api-graphql/master/assets/docker-api-graphql-video-screenshot.png)](https://youtu.be/iSmBXnNo6VQ "Demo Video for Docker API GraphQL")
 
 
