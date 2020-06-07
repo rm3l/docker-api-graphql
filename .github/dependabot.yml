@@ -1,0 +1,22 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: '04:00'
+  open-pull-requests-limit: 10
+  reviewers:
+  - rm3l
+  labels:
+  - dependencies
+- package-ecosystem: docker
+  directory: "/"
+  schedule:
+    interval: weekly
+    time: '04:00'
+  open-pull-requests-limit: 10
+  reviewers:
+  - rm3l
+  labels:
+  - dependencies
