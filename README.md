@@ -4,7 +4,7 @@
 
 > A GraphQL API Server around the Docker Remote API. SpringBoot-based app, written in Kotlin.
 
-[![Travis branch](https://img.shields.io/travis/rm3l/docker-api-graphql/master.svg)](https://travis-ci.org/rm3l/docker-api-graphql) 
+[![Build Workflow](https://github.com/rm3l/docker-api-graphql/workflows/CI/badge.svg)](https://github.com/rm3l/docker-api-graphql/actions?query=workflow%3A%22CI%22) 
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat)](https://github.com/rm3l/docker-api-graphql/blob/master/LICENSE)
 [![Coverage Status](https://coveralls.io/repos/github/rm3l/docker-api-graphql/badge.svg?branch=master)](https://coveralls.io/github/rm3l/docker-api-graphql?branch=master)  
 
