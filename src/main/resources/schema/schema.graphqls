@@ -1,6 +1,6 @@
 schema {
     query: Query
-    mutation: Mutation
+#    mutation: Mutation
 }
 
 #Root Query
@@ -34,23 +34,23 @@ type Query {
     networks(filter: NetworkFilter): [Network]
 }
 
-type Mutation {
-
-    ################
-    # Containers
-    ################
-    createContainers(requests: [CreateContainerRequest]): [Container]
-    resizeContainerTTY(idOrName: String!, height: Int, width: Int): Boolean
-    startContainer(idOrName: String!, detachKeys: String): Boolean
-    stopContainer(idOrName: String!, waitSeconds: Int): Boolean
-    restartContainer(idOrName: String!, waitSeconds: Int):Boolean
-    killContainer(idOrName: String!, signal: String): Boolean
-    updateContainer(idOrName: String!, request: UpdateContainerRequest): Container
-    renameContainer(idOrName: String!, name: String): Boolean
-    pauseContainer(idOrName: String!): Boolean
-    unpauseContainer(idOrName: String!): Boolean
-    waitContainer(idOrName: String!, condition: String): Boolean
-    removeContainer(idOrName: String!, removeVolumes: Boolean, killIfRunning: Boolean, removeLink: Boolean): Boolean
-    deleteStoppedContainers(filter: PruneContainerFilter): PruneContainerResponse
-
-}
+#type Mutation {
+#
+#    ################
+#    # Containers
+#    ################
+#    createContainers(requests: [CreateContainerRequest]): [Container]
+#    resizeContainerTTY(idOrName: String!, height: Int, width: Int): Boolean
+#    startContainer(idOrName: String!, detachKeys: String): Boolean
+#    stopContainer(idOrName: String!, waitSeconds: Int): Boolean
+#    restartContainer(idOrName: String!, waitSeconds: Int):Boolean
+#    killContainer(idOrName: String!, signal: String): Boolean
+#    updateContainer(idOrName: String!, request: UpdateContainerRequest): Container
+#    renameContainer(idOrName: String!, name: String): Boolean
+#    pauseContainer(idOrName: String!): Boolean
+#    unpauseContainer(idOrName: String!): Boolean
+#    waitContainer(idOrName: String!, condition: String): Boolean
+#    removeContainer(idOrName: String!, removeVolumes: Boolean, killIfRunning: Boolean, removeLink: Boolean): Boolean
+#    deleteStoppedContainers(filter: PruneContainerFilter): PruneContainerResponse
+#
+#}

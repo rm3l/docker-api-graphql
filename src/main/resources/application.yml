@@ -1,3 +1,8 @@
 spring:
     main:
         banner-mode: "off"
+
+graphql:
+    servlet:
+      websocket:
+          enabled: false

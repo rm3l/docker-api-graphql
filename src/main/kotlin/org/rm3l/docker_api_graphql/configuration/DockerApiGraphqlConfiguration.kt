@@ -23,20 +23,18 @@
 
 package org.rm3l.docker_api_graphql.configuration
 
-import com.coxautodev.graphql.tools.SchemaParser
+import graphql.kickstart.tools.SchemaParser
 import com.spotify.docker.client.DefaultDockerClient
 import com.spotify.docker.client.DockerCertificates
 import com.spotify.docker.client.messages.ContainerInfo
 import com.spotify.docker.client.messages.ImageInfo
 import graphql.schema.GraphQLSchema
-import graphql.servlet.SimpleGraphQLServlet
 import org.rm3l.docker_api_graphql.resolvers.*
 import org.rm3l.docker_api_graphql.scalars.Date
 import org.rm3l.docker_api_graphql.scalars.StringAnyMap
 import org.rm3l.docker_api_graphql.scalars.StringSet
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.web.servlet.ServletRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver
@@ -100,9 +98,5 @@ class DockerApiGraphqlConfiguration {
                 .build()
                 .makeExecutableSchema()
     }
-
-    @Bean
-    fun graphQLServletRegistrationBean(schema: GraphQLSchema) =
-            ServletRegistrationBean(SimpleGraphQLServlet(schema), "/graphql")
 
 }

@@ -23,7 +23,7 @@
 
 package org.rm3l.docker_api_graphql.resolvers
 
-import com.coxautodev.graphql.tools.GraphQLResolver
+import graphql.kickstart.tools.GraphQLResolver
 import com.spotify.docker.client.DefaultDockerClient
 import com.spotify.docker.client.DockerClient
 import com.spotify.docker.client.messages.Container

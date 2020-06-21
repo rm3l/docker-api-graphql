@@ -23,14 +23,14 @@
 
 package org.rm3l.docker_api_graphql.resolvers
 
-import com.coxautodev.graphql.tools.GraphQLRootResolver
+import graphql.kickstart.tools.GraphQLQueryResolver
 import com.spotify.docker.client.DefaultDockerClient
 import com.spotify.docker.client.DockerClient
 import com.spotify.docker.client.DockerClient.ListContainersParam.*
 import com.spotify.docker.client.messages.*
 import org.rm3l.docker_api_graphql.resources.*
 
-class Query(val dockerClient: DefaultDockerClient) : GraphQLRootResolver {
+class Query(val dockerClient: DefaultDockerClient) : GraphQLQueryResolver {
 
     fun system() = System(dockerClient.info(), dockerClient.version())
 
