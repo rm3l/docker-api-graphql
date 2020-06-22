@@ -35,6 +35,6 @@ VOLUME "/etc/docker"
 ENV DOCKER_HOST unix:///var/run/docker.sock
 ENV DOCKER_CERT_PATH /etc/docker
 WORKDIR /app
-COPY --from=appBuild "/usr/src/docker-api-graphql/build/libs/docker-api-graphql-1.0.0-SNAPSHOT.war" "./docker-api-graphql.war"
-ENTRYPOINT ["java", "-Dserver.port=8080", "-jar", "/app/docker-api-graphql.war"]
+COPY --from=appBuild "/usr/src/docker-api-graphql/build/libs/docker-api-graphql-1.0.0-SNAPSHOT.jar" "./docker-api-graphql.jar"
+ENTRYPOINT ["java", "-Dserver.port=8080", "-jar", "/app/docker-api-graphql.jar"]
 EXPOSE 8080
