@@ -49,6 +49,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'war'
 apply plugin: "com.google.cloud.tools.jib"
 
+group = 'rm3l'
 version = '1.0.0-SNAPSHOT'
 sourceCompatibility = 11
 targetCompatibility = 11
