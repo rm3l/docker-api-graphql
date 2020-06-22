@@ -49,7 +49,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: "com.google.cloud.tools.jib"
 
 group = 'rm3l'
-version = '1.0.0-SNAPSHOT'
+version = '0.1.1'
 sourceCompatibility = 11
 targetCompatibility = 11
 compileKotlin {

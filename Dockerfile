@@ -29,12 +29,12 @@ RUN ./gradlew clean build --stacktrace
 FROM adoptopenjdk:14-jdk-openj9
 MAINTAINER Armel Soro <armel+docker_api_graphql@rm3l.org>
 LABEL org.rm3l.docker-api-graphql.is-beta="true" \
-    org.rm3l.docker-api-graphql.version="1.0.0-SNAPSHOT" \
+    org.rm3l.docker-api-graphql.version="0.1.1" \
     org.rm3l.docker-api-graphql.vcs.url="https://github.com/rm3l/docker-api-graphql"
 VOLUME "/etc/docker"
 ENV DOCKER_HOST unix:///var/run/docker.sock
 ENV DOCKER_CERT_PATH /etc/docker
 WORKDIR /app
-COPY --from=appBuild "/usr/src/docker-api-graphql/build/libs/docker-api-graphql-1.0.0-SNAPSHOT.jar" "./docker-api-graphql.jar"
+COPY --from=appBuild "/usr/src/docker-api-graphql/build/libs/docker-api-graphql-0.1.1.jar" "./docker-api-graphql.jar"
 ENTRYPOINT ["java", "-Dserver.port=8080", "-jar", "/app/docker-api-graphql.jar"]
 EXPOSE 8080
