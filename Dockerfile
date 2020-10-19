@@ -19,14 +19,14 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 #
-FROM adoptopenjdk:14-jdk-openj9 AS appBuild
+FROM adoptopenjdk:15-jdk-openj9 AS appBuild
 MAINTAINER Armel Soro <armel+docker_api_graphql@rm3l.org>
 VOLUME "/usr/src/docker-api-graphql/.gradle"
 WORKDIR /usr/src/docker-api-graphql
 COPY . .
 RUN ./gradlew clean build --stacktrace
 
-FROM adoptopenjdk:14-jdk-openj9
+FROM adoptopenjdk:15-jdk-openj9
 MAINTAINER Armel Soro <armel+docker_api_graphql@rm3l.org>
 LABEL org.rm3l.docker-api-graphql.is-beta="true" \
     org.rm3l.docker-api-graphql.version="0.1.1" \
