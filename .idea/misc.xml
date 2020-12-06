@@ -3,10 +3,6 @@
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="web" url="file://$PROJECT_DIR$" />
   </component>
-  <component name="KubernetesApiPersistence">
-    <option name="context" value="kubernetes-admin@kubernetes" />
-    <option name="namespace" value="lemra-services" />
-  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="false" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
