@@ -80,7 +80,7 @@ dependencies {
 
     compile 'com.spotify:docker-client:8.16.0'
     //Needed because of the issue reported here : https://github.com/spotify/docker-client/issues/1030#issuecomment-493448616
-    compile 'org.glassfish.jersey.inject:jersey-hk2:3.0.0'
+    compile 'org.glassfish.jersey.inject:jersey-hk2:3.0.1'
 
 
     testCompile("org.springframework.boot:spring-boot-starter-tomcat")
