@@ -42,7 +42,7 @@ jobs:
         with:
           java-version: 15
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v2.1.4
         with:
           path: |
             ~/.gradle/wrapper
@@ -75,7 +75,7 @@ jobs:
         with:
           java-version: 15
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v2.1.4
         with:
           path: |
             ~/.gradle/wrapper
