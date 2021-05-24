@@ -69,22 +69,22 @@ configurations {
 }
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    compile("org.jetbrains.kotlin:kotlin-reflect")
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
 
-    compile "com.graphql-java-kickstart:graphql-spring-boot-starter:${graphqlSpringBootStarterVersion}"
+    implementation "com.graphql-java-kickstart:graphql-spring-boot-starter:${graphqlSpringBootStarterVersion}"
     // to embed GraphiQL tool
-    compile "com.graphql-java-kickstart:graphiql-spring-boot-starter:${graphqlSpringBootStarterVersion}"
-    compile "com.graphql-java-kickstart:graphql-java-tools:11.0.1"
+    implementation "com.graphql-java-kickstart:graphiql-spring-boot-starter:${graphqlSpringBootStarterVersion}"
+    implementation "com.graphql-java-kickstart:graphql-java-tools:11.0.1"
 
-    compile 'com.spotify:docker-client:8.16.0'
+    implementation 'com.spotify:docker-client:8.16.0'
     //Needed because of the issue reported here : https://github.com/spotify/docker-client/issues/1030#issuecomment-493448616
-    compile 'org.glassfish.jersey.inject:jersey-hk2:3.0.2'
+    implementation 'org.glassfish.jersey.inject:jersey-hk2:3.0.2'
 
 
-    testCompile("org.springframework.boot:spring-boot-starter-tomcat")
-    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-tomcat")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 jib {
