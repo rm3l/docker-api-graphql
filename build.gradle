@@ -76,7 +76,7 @@ dependencies {
     implementation "com.graphql-java-kickstart:graphql-spring-boot-starter:${graphqlSpringBootStarterVersion}"
     // to embed GraphiQL tool
     implementation "com.graphql-java-kickstart:graphiql-spring-boot-starter:${graphqlSpringBootStarterVersion}"
-    implementation "com.graphql-java-kickstart:graphql-java-tools:11.0.1"
+    implementation "com.graphql-java-kickstart:graphql-java-tools:11.1.1"
 
     implementation 'com.spotify:docker-client:8.16.0'
     //Needed because of the issue reported here : https://github.com/spotify/docker-client/issues/1030#issuecomment-493448616
