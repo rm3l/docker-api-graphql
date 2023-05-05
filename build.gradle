@@ -24,7 +24,7 @@
 buildscript {
     ext {
         kotlinVersion = '1.8.21'
-        springBootVersion = '2.6.7'
+        springBootVersion = '3.0.6'
         graphqlSpringBootStarterVersion = '11.1.0'
     }
     repositories {
